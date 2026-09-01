@@ -1,0 +1,13 @@
+{
+  // Deploy: site estático servido pelo Cloudflare Workers Static Assets.
+  // Não há Worker script — só o diretório `public/`, que é a raiz do site.
+  //
+  // ⚠ `name` precisa bater com o nome do Worker já criado no painel da
+  // Cloudflare (o que está ligado a este repositório). Se lá estiver outro
+  // nome, troque aqui — senão o build sobe para um Worker diferente.
+  "name": "convite-amy-edmonson",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./public"
+  }
+}

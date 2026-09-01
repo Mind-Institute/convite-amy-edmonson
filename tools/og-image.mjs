@@ -1,5 +1,5 @@
 /**
- * Gera assets/og-image.png (1200 × 630) a partir de og-image.html.
+ * Gera public/assets/og-image.png (1200 × 630) a partir de tools/og-image.html.
  *
  *   npm install       # instala o Playwright (só dev)
  *   npm run og
@@ -15,8 +15,8 @@ import { dirname, resolve } from 'node:path';
 import { statSync } from 'node:fs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const source = `file://${resolve(root, 'og-image.html')}`;
-const output = resolve(root, 'assets/og-image.png');
+const source = `file://${resolve(root, 'tools/og-image.html')}`;
+const output = resolve(root, 'public/assets/og-image.png');
 
 const browser = await chromium.launch();
 const page = await browser.newPage({

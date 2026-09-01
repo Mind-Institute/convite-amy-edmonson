@@ -8,26 +8,46 @@ colunas em desktop — e um modal de confirmação de presença com seis campos 
 
 ## Como rodar
 
-Site estático, sem build. Basta servir a pasta:
+Site estático, sem build. `public/` é a raiz do site:
 
 ```bash
-npx serve .          # ou: python3 -m http.server 8000
+npm start            # ou: npx serve public
 ```
 
-Depois abra `http://localhost:3000`. Publicação: qualquer host estático (GitHub Pages, Vercel,
-Netlify, S3) — é só subir a raiz do repositório.
+Depois abra `http://localhost:3000`.
 
 ## Estrutura
 
+`public/` é o que vai para o ar. Tudo fora dele é fonte, ferramenta ou referência.
+
 | Arquivo | O que é |
 |---|---|
-| `index.html` | Marcação do convite e do modal |
-| `styles.css` | Design system (tokens), layout do canvas e do modal |
-| `script.js` | Estado do modal, máscara de WhatsApp e envio do RSVP |
-| `og-image.html` | Fonte da thumbnail de link (1200 × 630) — não é uma página do site |
-| `tools/og-image.mjs` | Rasteriza `og-image.html` em `assets/og-image.png` |
-| `assets/` | Imagens da peça e a thumbnail gerada |
+| `public/index.html` | Marcação do convite e do modal |
+| `public/styles.css` | Design system (tokens), layout do canvas e do modal |
+| `public/script.js` | Estado do modal, máscara de WhatsApp e envio do RSVP |
+| `public/assets/` | Imagens da peça e a thumbnail de link gerada |
+| `tools/og-image.html` | Fonte da thumbnail de link (1200 × 630) — não é uma página do site |
+| `tools/og-image.mjs` | Rasteriza `tools/og-image.html` em `public/assets/og-image.png` |
+| `wrangler.jsonc` | Config de deploy (Cloudflare Workers Static Assets) |
 | `docs/handoff/` | Handoff de design original (referência: medidas, cores e copy aprovada) |
+
+## Deploy
+
+Cloudflare Workers, servindo `public/` como static assets — sem Worker script e sem build step.
+O `wrangler.jsonc` é o que o build lê; sem ele o `wrangler` falha com
+*"Missing entry-point to Worker script or to assets directory"*.
+
+Dois pontos de atenção na configuração da Cloudflare:
+
+- **`name` precisa bater com o nome do Worker** já ligado a este repositório no painel. Está como
+  `convite-amy-edmonson`; se lá for outro, troque no `wrangler.jsonc` — senão o build publica num
+  Worker diferente.
+- **`npx wrangler versions upload` só sobe uma versão, não coloca no ar.** É o comando certo para
+  branch de preview; para a branch de produção o comando precisa ser `npx wrangler deploy` (ou
+  promover a versão pelo painel).
+
+O site não depende da Cloudflare: `public/` é HTML estático puro e roda igual em GitHub Pages,
+Vercel, Netlify ou S3, apontando a raiz de publicação para `public/`.
 
 ## Decisões de implementação
 
@@ -85,13 +105,13 @@ RD Station/HubSpot → endpoint próprio.
 
 ## Thumbnail de link (WhatsApp)
 
-`assets/og-image.png` (1200 × 630) é a imagem que aparece no preview quando o link é colado no
-WhatsApp, no e-mail ou no Slack. A fonte dela é `og-image.html`, uma composição landscape separada
+`public/assets/og-image.png` (1200 × 630) é a imagem que aparece no preview quando o link é colado no
+WhatsApp, no e-mail ou no Slack. A fonte dela é `tools/og-image.html`, uma composição landscape separada
 — não um recorte do pôster, que em 9:16 seria cortado pelo crawler.
 
 ```bash
 npm install      # Playwright, só para este script
-npm run og       # og-image.html -> assets/og-image.png
+npm run og       # tools/og-image.html -> public/assets/og-image.png
 ```
 
 O script avisa e sai com código 1 se a Satoshi não tiver carregado, para não gerar um PNG com a
@@ -99,7 +119,7 @@ tipografia errada sem ninguém perceber.
 
 Ao publicar, dois ajustes:
 
-1. **`og:image` precisa virar URL absoluta** em `index.html` (o WhatsApp não resolve caminho
+1. **`og:image` precisa virar URL absoluta** em `public/index.html` (o WhatsApp não resolve caminho
    relativo de forma confiável). Há dois lugares: `og:image` e `twitter:image`.
 2. A página está com `<meta name="robots" content="noindex, nofollow">`, porque o convite é
    pessoal e não deve ir para busca. Crawlers de preview normalmente ignoram esse meta, mas se o
@@ -115,7 +135,7 @@ Herdadas do handoff, antes de ir para produção:
   oficial ao time de marca.
 - **`assets/amy-edmondson.png`** tem só 380px de largura e é renderizada a 620px — pedir arquivo
   em resolução maior.
-- **`assets/og-image.png` foi gerada sem a Satoshi** (a Fontshare estava bloqueada no ambiente em
+- **`public/assets/og-image.png` foi gerada sem a Satoshi** (a Fontshare estava bloqueada no ambiente em
   que rodou), então saiu com a fonte de fallback. Rodar `npm run og` uma vez numa máquina com
   acesso à Fontshare e commitar o PNG antes de distribuir o link.
 

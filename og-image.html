@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>OG image — Convite Amy Edmondson</title>
+<!--
+  Fonte da imagem de preview (WhatsApp, e-mail, Slack, LinkedIn).
+  Não é uma página do site: existe só para ser rasterizada em
+  assets/og-image.png por tools/og-image.mjs.
+
+  Formato 1200 × 630 (1.91:1) — o que o WhatsApp usa para o card
+  grande de link. Ao editar, rode `npm run og` para regerar o PNG.
+-->
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f%5B%5D=satoshi@400,700,900&amp;display=block">
+<style>
+  :root {
+    --ink: #0b0b0f;
+    --green: #68ee95;
+    --orange: #ff7057;
+    --font: "Satoshi", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: #08080b;
+    font-family: var(--font);
+  }
+
+  .og {
+    position: relative;
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .og__glow {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .og__glow--green {
+    top: -280px;
+    right: -180px;
+    width: 780px;
+    height: 780px;
+    background: radial-gradient(circle, rgba(104, 238, 149, 0.12) 0%, rgba(11, 11, 15, 0) 70%);
+  }
+
+  .og__glow--purple {
+    bottom: -300px;
+    left: -220px;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(152, 67, 255, 0.16) 0%, rgba(11, 11, 15, 0) 70%);
+  }
+
+  /* Recorte da Amy: o original corta reto na altura do peito,
+     então o mask dissolve a borda no fundo. */
+  .og__photo {
+    position: absolute;
+    right: 44px;
+    bottom: 0;
+    width: 372px;
+    height: auto;
+    display: block;
+    -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+  }
+
+  .og__content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding: 52px 56px 46px;
+  }
+
+  .og__lockup {
+    align-self: flex-start;
+    flex: none;
+    height: 66px;
+    width: auto;
+    display: block;
+  }
+
+  .og__main {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 700px;
+  }
+
+  .og__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .og__rule {
+    width: 44px;
+    height: 3px;
+    background: var(--green);
+    display: block;
+  }
+
+  .og__label {
+    color: var(--green);
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .og__pill {
+    padding: 8px 20px;
+    border-radius: 100px;
+    background: var(--green);
+    color: var(--ink);
+    font-size: 17px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .og__title {
+    margin: 0;
+    font-size: 66px;
+    font-weight: 900;
+    line-height: 0.94;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .og__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .og__when {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin: 0;
+    font-size: 34px;
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+
+  .og__bullet { color: var(--green); }
+
+  .og__place {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 22px;
+    font-weight: 400;
+  }
+
+  .og__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    padding-top: 26px;
+    border-top: 1px solid rgba(143, 143, 163, 0.25);
+    max-width: 700px;
+  }
+
+  .og__seal {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    color: var(--orange);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .og__seal-mark {
+    width: 9px;
+    height: 9px;
+    background: var(--orange);
+    display: block;
+  }
+
+  .og__wellz { height: 46px; width: auto; display: block; }
+</style>
+</head>
+<body>
+<div class="og" id="og">
+  <div class="og__glow og__glow--green"></div>
+  <div class="og__glow og__glow--purple"></div>
+
+  <img class="og__photo" src="assets/amy-edmondson.png" alt="">
+
+  <div class="og__content">
+    <img class="og__lockup" src="assets/summit-lockup.png" alt="Mind Summit 2026">
+
+    <div class="og__main">
+      <div class="og__eyebrow">
+        <span class="og__rule"></span>
+        <span class="og__label">Almoço fechado</span>
+        <span class="og__pill">16 de setembro</span>
+      </div>
+      <h1 class="og__title">Amy Edmondson, sem palco</h1>
+      <div class="og__meta">
+        <p class="og__when"><span>16 SET</span><span class="og__bullet">•</span><span>13H30</span></p>
+        <p class="og__place">São Paulo Expo · durante o Mind Summit 2026</p>
+      </div>
+    </div>
+
+    <div class="og__footer">
+      <p class="og__seal"><span class="og__seal-mark"></span>Convite pessoal · Não transferível</p>
+      <img class="og__wellz" src="assets/wellz-branco-hd.png" alt="Wellz by Wellhub">
+    </div>
+  </div>
+</div>
+</body>
+</html>

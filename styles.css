@@ -45,7 +45,7 @@
 
   /* Unidade do modal: mesma escala, com piso para os campos
      continuarem legíveis e digitáveis (input = 26 × 0.62 ≈ 16px) */
-  --mu: max(var(--u), 0.62px);
+  --mu: clamp(0.62px, var(--u), 1px);
   --modal-pad: clamp(16px, 4vw, 42px);
 
   --transition: 0.2s ease;
@@ -689,4 +689,160 @@ button {
   }
 
   .modal__card { transform: none; }
+}
+
+/* ============================================================
+   Desktop (landscape ≥ 900px)
+
+   O convite deixa de ser o pôster 9:16 letterboxado e vira um
+   layout de duas colunas que ocupa a largura da tela. Só o
+   --u e o arranjo mudam: os tokens, as cores e a hierarquia
+   continuam os mesmos.
+   ============================================================ */
+
+@media (min-width: 900px) and (min-aspect-ratio: 1/1) {
+
+  :root {
+    /* mais preso à altura que à largura — o convite tenta caber
+       numa tela só, com piso para o texto não ficar pequeno demais */
+    --u: clamp(0.72px, min(calc(100vw / 1560), calc(100vh / 1200)), 1.15px);
+  }
+
+  body {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .stage {
+    align-items: stretch;
+    justify-content: stretch;
+  }
+
+  .canvas {
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .canvas__content {
+    width: 100%;
+    max-width: calc(var(--u) * 1700);
+    min-height: 100vh;
+    margin-inline: auto;
+  }
+
+  .glow--green {
+    top: calc(var(--u) * -320);
+    right: calc(var(--u) * -280);
+    width: calc(var(--u) * 1300);
+    height: calc(var(--u) * 1300);
+  }
+
+  .glow--purple {
+    bottom: calc(var(--u) * -260);
+    left: calc(var(--u) * -320);
+    width: calc(var(--u) * 1100);
+    height: calc(var(--u) * 1100);
+  }
+
+  /* Header */
+
+  .header {
+    padding: calc(var(--u) * 40) calc(var(--u) * 80) calc(var(--u) * 30);
+  }
+
+  .header__lockup { height: calc(var(--u) * 84); }
+
+  .header__seal { font-size: calc(var(--u) * 18); }
+
+  /* Corpo: duas colunas + rodapé de parceria na largura toda */
+
+  /* Coluna esquerda: título, lead e o bloco de data + CTA.
+     Coluna direita: Amy (nome, bio e foto), que atravessa as duas
+     linhas e encosta a foto na base, como no pôster.  */
+  .body {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    grid-template-rows: 1fr auto auto;
+    grid-template-areas:
+      "intro   speaker"
+      "details speaker"
+      "partner partner";
+    column-gap: calc(var(--u) * 64);
+    row-gap: calc(var(--u) * 36);
+    padding: calc(var(--u) * 56) calc(var(--u) * 80) calc(var(--u) * 40);
+  }
+
+  .intro {
+    grid-area: intro;
+    align-self: start;
+    gap: calc(var(--u) * 26);
+  }
+
+  .speaker {
+    grid-area: speaker;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: calc(var(--u) * 32);
+  }
+
+  .speaker__text { flex: none; gap: calc(var(--u) * 18); }
+
+  .details { grid-area: details; }
+  .partner { grid-area: partner; }
+
+  .intro__title { font-size: calc(var(--u) * 84); }
+
+  .intro__lead {
+    max-width: calc(var(--u) * 760);
+    font-size: calc(var(--u) * 26);
+  }
+
+  .speaker__name { font-size: calc(var(--u) * 54); }
+
+  .speaker__bio {
+    max-width: calc(var(--u) * 760);
+    font-size: calc(var(--u) * 22);
+  }
+
+  /* Sangra em direção à margem direita, como no pôster. O recorte
+     original corta reto na altura do peito: no pôster essa borda
+     encosta na divisória, aqui ela flutua — o mask dissolve o corte
+     no fundo em vez de deixar a linha aparecendo. */
+  .speaker__photo {
+    align-self: flex-end;
+    width: 100%;
+    max-width: calc(var(--u) * 480);
+    margin: 0 calc(var(--u) * -40) 0 0;
+    -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+  }
+
+  /* Data, local e CTA */
+
+  .details { padding: calc(var(--u) * 34) 0 0; }
+
+  .details__when { font-size: calc(var(--u) * 48); }
+
+  .details__where p { font-size: calc(var(--u) * 22); }
+
+  .details__pin {
+    width: calc(var(--u) * 26);
+    height: calc(var(--u) * 26);
+  }
+
+  .cta {
+    margin-bottom: 0;
+    padding: calc(var(--u) * 21) calc(var(--u) * 38);
+    font-size: calc(var(--u) * 24);
+  }
+
+  /* Rodapé de parceria */
+
+  .partner { padding-top: calc(var(--u) * 30); }
+
+  .partner__label { font-size: calc(var(--u) * 17); }
+
+  .partner__logo { height: calc(var(--u) * 64); }
 }

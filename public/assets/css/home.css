@@ -1,0 +1,149 @@
+/* ============================================================
+   Home — seleção entre os convites dos almoços fechados
+   Tokens, header e eyebrow vêm do styles.css compartilhado.
+   ============================================================ */
+
+.pagina-home {
+  --u: min(calc(100vw / 1080), 1px);
+  overflow-x: hidden;
+}
+
+.home {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  background: var(--ink);
+}
+
+@supports (height: 100svh) {
+  .home { min-height: 100svh; }
+}
+
+.home__conteudo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: calc(var(--u) * 1080);
+  min-height: 100vh;
+  margin-inline: auto;
+}
+
+@supports (height: 100svh) {
+  .home__conteudo { min-height: 100svh; }
+}
+
+.home__corpo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: calc(var(--u) * 56);
+  padding: calc(var(--u) * 62) calc(var(--u) * 68) calc(var(--u) * 56);
+}
+
+.pagina-home .intro__title { font-size: calc(var(--u) * 86); }
+
+.convites {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: calc(var(--u) * 28);
+}
+
+.convite {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: var(--hairline) solid var(--hairline-22);
+  border-radius: calc(var(--u) * 24);
+  background: var(--surface-soft);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color var(--transition), transform var(--transition);
+}
+
+.convite:hover {
+  border-color: var(--green);
+  transform: translateY(calc(var(--u) * -4));
+}
+
+.convite__foto {
+  width: 100%;
+  height: auto;
+}
+
+.convite__info {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 10);
+  padding: calc(var(--u) * 30) calc(var(--u) * 32) calc(var(--u) * 32);
+}
+
+.convite__data {
+  margin: 0;
+  color: var(--green);
+  font-size: calc(var(--u) * 21);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.convite__nome {
+  margin: 0;
+  color: var(--white);
+  font-size: calc(var(--u) * 44);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.convite__tema {
+  margin: 0;
+  color: var(--text-72);
+  font-size: calc(var(--u) * 26);
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+.convite__acao {
+  margin: calc(var(--u) * 8) 0 0;
+  color: var(--green);
+  font-size: calc(var(--u) * 26);
+  font-weight: 700;
+}
+
+.home__rodape {
+  padding-top: calc(var(--u) * 30);
+  border-top: var(--hairline) solid var(--hairline-25);
+}
+
+.home__rodape p {
+  margin: 0;
+  color: var(--gray-muted);
+  font-size: calc(var(--u) * 21);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* Desktop — os dois convites lado a lado */
+@media (min-width: 760px) {
+  .convites { grid-template-columns: 1fr 1fr; }
+}
+
+@media (min-width: 900px) and (min-aspect-ratio: 1/1) {
+  .pagina-home { --u: min(calc(100vw / 1240), 1px); }
+  .home__conteudo { max-width: calc(var(--u) * 1240); }
+
+  /* aperta o suficiente para o seletor caber numa tela só */
+  .home__corpo { gap: calc(var(--u) * 40); }
+  .pagina-home .intro__title { font-size: calc(var(--u) * 68); }
+
+  .convite__foto {
+    height: calc(var(--u) * 190);
+    object-fit: cover;
+    object-position: 50% 18%;
+  }
+}

@@ -1,21 +1,25 @@
 /* ============================================================
-   Convite — Almoço CHROs com Amy Edmondson · Mind Summit 2026
+   Convites dos almoços fechados — Mind Summit 2026
 
-   Estado local único (modal aberto/fechado) + envio do RSVP.
+   Compartilhado pelas duas páginas de convite. O modal, a máscara
+   de WhatsApp e o envio são idênticos; o que muda é o valor de
+   `convite`, lido de data-convite no <body> de cada página.
 
-   ENVIO: enquanto RSVP_ENDPOINT for null, o formulário cai no
-   mailto: do protótipo. Para ligar um envio real (Formspree /
-   Basin / RD Station / endpoint próprio), basta preencher a
-   constante abaixo — o resto do fluxo (loading, sucesso, erro)
-   já está implementado.
+   ENVIO: grava direto na tabela `rsvps` do Supabase. A chave abaixo
+   é a PUBLICÁVEL (anon) — ela é feita para ficar exposta no
+   navegador. A proteção não é a chave: é o RLS, que dá a anon só
+   INSERT. Com essa chave não se lê a lista de convidados.
    ============================================================ */
 
 (function () {
   'use strict';
 
-  var RSVP_ENDPOINT = null;
-  var RSVP_EMAIL = 'contato@joinmind.com.br';
-  var RSVP_SUBJECT = 'Confirmação — Almoço CHROs com Amy Edmondson (16/09)';
+  var SUPABASE_URL = 'https://qokdydgdovswjalpummr.supabase.co';
+  var SUPABASE_KEY = 'sb_publishable_VMFQryd0sENG0sCg2mdBfA_bHWapfIt';
+  var CONTATO = 'contato@joinmind.com.br';
+
+  // qual convite originou a confirmação — definido em data-convite no <body>
+  var CONVITE = document.body.getAttribute('data-convite') || '';
 
   var stage = document.getElementById('stage');
   var modal = document.getElementById('modal');
@@ -109,10 +113,15 @@
     }
   });
 
-  /* ---------- Máscara de WhatsApp: (00) 00000-0000 ---------- */
+  /* ---------- Máscaras ---------- */
 
+  function digitos(value) {
+    return value.replace(/\D/g, '');
+  }
+
+  // (00) 00000-0000
   function maskPhone(value) {
-    var d = value.replace(/\D/g, '').slice(0, 11);
+    var d = digitos(value).slice(0, 11);
     if (!d) return '';
     if (d.length <= 2) return '(' + d;
     if (d.length <= 6) return '(' + d.slice(0, 2) + ') ' + d.slice(2);
@@ -120,10 +129,39 @@
     return '(' + d.slice(0, 2) + ') ' + d.slice(2, 7) + '-' + d.slice(7);
   }
 
-  Array.prototype.forEach.call(document.querySelectorAll('[data-mask="telefone"]'), function (input) {
+  // 000.000.000-00
+  function maskCpf(value) {
+    var d = digitos(value).slice(0, 11);
+    if (d.length <= 3) return d;
+    if (d.length <= 6) return d.slice(0, 3) + '.' + d.slice(3);
+    if (d.length <= 9) return d.slice(0, 3) + '.' + d.slice(3, 6) + '.' + d.slice(6);
+    return d.slice(0, 3) + '.' + d.slice(3, 6) + '.' + d.slice(6, 9) + '-' + d.slice(9);
+  }
+
+  // dígitos verificadores — pega erro de digitação antes de virar linha no banco
+  function cpfValido(d) {
+    if (d.length !== 11 || /^(\d)\1{10}$/.test(d)) return false;
+    var soma, resto, i;
+    soma = 0;
+    for (i = 0; i < 9; i++) soma += parseInt(d.charAt(i), 10) * (10 - i);
+    resto = (soma * 10) % 11;
+    if (resto === 10) resto = 0;
+    if (resto !== parseInt(d.charAt(9), 10)) return false;
+    soma = 0;
+    for (i = 0; i < 10; i++) soma += parseInt(d.charAt(i), 10) * (11 - i);
+    resto = (soma * 10) % 11;
+    if (resto === 10) resto = 0;
+    return resto === parseInt(d.charAt(10), 10);
+  }
+
+  var MASCARAS = { telefone: maskPhone, cpf: maskCpf };
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-mask]'), function (input) {
+    var aplicar = MASCARAS[input.getAttribute('data-mask')];
+    if (!aplicar) return;
     input.addEventListener('input', function () {
       var atEnd = input.selectionStart === input.value.length;
-      input.value = maskPhone(input.value);
+      input.value = aplicar(input.value);
       if (atEnd) input.setSelectionRange(input.value.length, input.value.length);
     });
   });
@@ -153,39 +191,24 @@
     success.querySelector('.success__close').focus();
   }
 
-  function buildMailto(data) {
-    var body = [
-      'Nome: ' + data.nome + ' ' + data.sobrenome,
-      'Empresa: ' + data.empresa,
-      'Cargo: ' + data.cargo,
-      'E-mail: ' + data.email,
-      'WhatsApp: ' + data.whatsapp,
-      '',
-      'Confirmo minha presença no almoço com Amy Edmondson — 16/09, 13h30.'
-    ].join('\n');
-
-    return 'mailto:' + RSVP_EMAIL +
-      '?subject=' + encodeURIComponent(RSVP_SUBJECT) +
-      '&body=' + encodeURIComponent(body);
-  }
-
   function sendRsvp(data) {
-    if (!RSVP_ENDPOINT) {
-      window.location.href = buildMailto(data);
-      return Promise.resolve('mailto');
-    }
-
-    return fetch(RSVP_ENDPOINT, {
+    return fetch(SUPABASE_URL + '/rest/v1/rsvps', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: 'Bearer ' + SUPABASE_KEY,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal'
+      },
       body: JSON.stringify(data)
     }).then(function (response) {
       if (!response.ok) throw new Error('HTTP ' + response.status);
-      return 'endpoint';
+      return response;
     });
   }
 
   var whatsappInput = form.querySelector('[name="whatsapp"]');
+  var cpfInput = form.querySelector('[name="cpf"]');
 
   form.addEventListener('submit', function (event) {
     event.preventDefault();
@@ -206,32 +229,30 @@
     }
     whatsappInput.removeAttribute('aria-invalid');
 
+    if (!cpfValido(digitos(cpfInput.value))) {
+      cpfInput.setAttribute('aria-invalid', 'true');
+      cpfInput.focus();
+      showError('Confira o CPF — os dígitos não fecham.');
+      return;
+    }
+    cpfInput.removeAttribute('aria-invalid');
+
     var raw = new FormData(form);
     var data = {};
     ['nome', 'sobrenome', 'empresa', 'cargo', 'email', 'whatsapp'].forEach(function (key) {
       data[key] = (raw.get(key) || '').toString().trim();
     });
-    data.evento = 'Almoço CHROs com Amy Edmondson — Mind Summit 2026';
+    data.cpf = digitos(cpfInput.value);   // o banco guarda só os 11 dígitos
+    data.convite = CONVITE;
 
     setLoading(true);
 
     sendRsvp(data)
-      .then(function (via) {
-        if (via === 'mailto') {
-          showSuccess(
-            'Falta um passo',
-            'Abrimos seu aplicativo de e-mail com a confirmação pronta — é só enviar a mensagem. ' +
-            'Se nada abrir, escreva direto para ' + RSVP_EMAIL + '.'
-          );
-        } else {
-          showSuccess(
-            'Presença confirmada',
-            'Obrigado. Guardamos seu lugar no almoço com Amy Edmondson — 16/09, 13h30, São Paulo Expo.'
-          );
-        }
+      .then(function () {
+        showSuccess('Presença confirmada', success.getAttribute('data-mensagem') || '');
       })
       .catch(function () {
-        showError('Não conseguimos enviar sua confirmação agora. Tente de novo ou escreva para ' + RSVP_EMAIL + '.');
+        showError('Não conseguimos enviar sua confirmação agora. Tente de novo ou escreva para ' + CONTATO + '.');
       })
       .then(function () {
         setLoading(false);

@@ -1,0 +1,501 @@
+/* ============================================================
+   Convite — Almoço CHROs com Christina Maslach · Mind Summit 2026
+
+   Três telas de scroll (convite, line-up, "não é só palestra").
+   Tokens, header, eyebrow, CTA, modal e formulário vêm do
+   styles.css compartilhado; aqui ficam só os blocos próprios
+   desta peça.
+
+   Diferente do convite da Amy, que é um pôster de uma tela só,
+   esta página rola — então --u é guiado pela LARGURA, não pela
+   altura, e as seções têm altura automática.
+   ============================================================ */
+
+.pagina-maslach {
+  --u: min(calc(100vw / 1080), 1px);
+  --cream-muted: #403828;
+  overflow-x: hidden;
+}
+
+.tela {
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+.tela__conteudo {
+  position: relative;
+  width: 100%;
+  max-width: calc(var(--u) * 1080);
+  margin-inline: auto;
+}
+
+.tela__corpo {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 46);
+  padding: calc(var(--u) * 56) calc(var(--u) * 68) calc(var(--u) * 60);
+}
+
+/* data no header das telas 2 e 3, no lugar do selo de convite */
+.header__data {
+  margin: 0;
+  color: var(--gray-muted);
+  font-size: calc(var(--u) * 22);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.verde { color: var(--green); }
+
+/* ============================================================
+   Tela 1 — Convite
+   ============================================================ */
+
+.tela--convite,
+.tela--convite .tela__conteudo { min-height: calc(var(--u) * 1920); }
+
+.tela--convite .tela__conteudo {
+  display: flex;
+  flex-direction: column;
+}
+
+.tela--convite .tela__corpo {
+  flex: 1;
+  justify-content: space-between;
+  gap: calc(var(--u) * 52);
+}
+
+/* o texto para antes da foto: sem essas larguras o lead invade o rosto */
+.tela--convite .intro__lead,
+.tela--convite .intro__title { max-width: calc(var(--u) * 620); }
+
+.hero__foto {
+  position: absolute;
+  right: 0;
+  bottom: calc(var(--u) * 172);
+  width: calc(var(--u) * 535);
+  height: auto;
+  /* O recorte do PDF corta reto à esquerda (o texto estava queimado
+     por cima da foto): o mask dissolve essa borda no fundo. */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 22%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 22%);
+}
+
+.tela--convite .intro__title { font-size: calc(var(--u) * 92); }
+
+.palestrante {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 18);
+  max-width: calc(var(--u) * 560);
+}
+
+.palestrante__nome {
+  margin: 0;
+  color: var(--orange);
+  font-size: calc(var(--u) * 62);
+  font-weight: 900;
+  line-height: 0.94;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.palestrante__bio {
+  margin: 0;
+  color: var(--white);
+  font-size: calc(var(--u) * 29);
+  font-weight: 700;
+  line-height: 1.3;
+  text-wrap: pretty;
+}
+
+.palestrante__grupo {
+  margin: 0;
+  color: rgba(143, 143, 163, 0.8);
+  font-size: calc(var(--u) * 29);
+  font-weight: 900;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.quando {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(var(--u) * 14);
+  padding-top: calc(var(--u) * 34);
+  border-top: var(--hairline) solid var(--hairline-30);
+  max-width: calc(var(--u) * 560);
+}
+
+.quando__local {
+  margin: 0 0 calc(var(--u) * 12);
+  color: var(--text-70);
+  font-size: calc(var(--u) * 26);
+  line-height: 1.4;
+}
+
+/* Card de benefícios */
+
+.beneficios {
+  display: flex;
+  align-items: flex-start;
+  gap: calc(var(--u) * 24);
+  padding: calc(var(--u) * 32) calc(var(--u) * 36);
+  border-radius: calc(var(--u) * 24);
+  background: var(--surface-soft);
+}
+
+.beneficios__simbolo {
+  flex: none;
+  width: calc(var(--u) * 44);
+  height: auto;
+  margin-top: calc(var(--u) * 4);
+  color: var(--white);
+}
+
+.beneficios__texto {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 10);
+}
+
+.beneficios__titulo {
+  margin: 0;
+  color: var(--white);
+  font-size: calc(var(--u) * 29);
+  font-weight: 700;
+  line-height: 1.3;
+  text-wrap: pretty;
+}
+
+.beneficios__mais { color: var(--green); }
+
+.beneficios__extra {
+  margin: 0;
+  color: var(--gray-muted);
+  font-size: calc(var(--u) * 24);
+  line-height: 1.4;
+}
+
+/* ============================================================
+   Tela 2 — Line-up
+   ============================================================ */
+
+.secao__topo {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 24);
+}
+
+.secao__titulo {
+  margin: 0;
+  font-size: calc(var(--u) * 62);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.lineup {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: calc(var(--u) * 25);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: calc(var(--u) * 20);
+  background: var(--surface-soft);
+}
+
+.legend__foto {
+  width: 100%;
+  height: auto;
+}
+
+.legend__info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(var(--u) * 12);
+  padding: calc(var(--u) * 28) calc(var(--u) * 26) calc(var(--u) * 30);
+}
+
+.legend__nome {
+  margin: 0 0 calc(var(--u) * 4);
+  color: var(--white);
+  font-size: calc(var(--u) * 34);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.pill {
+  margin: 0;
+  padding: calc(var(--u) * 9) calc(var(--u) * 18);
+  border-radius: calc(var(--u) * 100);
+  font-size: calc(var(--u) * 19);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pill--palco { background: var(--green); color: var(--ink); }
+.pill--masterclass { background: var(--purple); color: var(--white); }
+
+.legend__tema {
+  margin: calc(var(--u) * 6) 0 0;
+  color: var(--white);
+  font-size: calc(var(--u) * 28);
+  line-height: 1.3;
+  text-wrap: pretty;
+}
+
+.lineup__rodape {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--u) * 32);
+}
+
+.lineup__resumo {
+  margin: 0;
+  color: var(--white);
+  font-size: calc(var(--u) * 30);
+  font-weight: 900;
+  line-height: 1.2;
+  text-transform: uppercase;
+  max-width: calc(var(--u) * 520);
+}
+
+/* ============================================================
+   Tela 3 — Não é só palestra
+   ============================================================ */
+
+.bloco {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 24);
+  padding: calc(var(--u) * 36);
+  border: var(--hairline) solid var(--hairline-22);
+  border-radius: calc(var(--u) * 24);
+  background: rgba(8, 8, 8, 0.6);
+}
+
+.bloco__eyebrow {
+  margin: 0;
+  color: var(--green);
+  font-size: calc(var(--u) * 22);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.bloco__interno {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 20);
+  padding: calc(var(--u) * 32);
+  border-radius: calc(var(--u) * 20);
+  background: var(--surface-card);
+}
+
+.bloco__titulo {
+  margin: 0;
+  color: var(--white);
+  font-size: calc(var(--u) * 38);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.bloco__texto {
+  margin: 0;
+  color: var(--text-85);
+  font-size: calc(var(--u) * 28);
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+.bloco__label {
+  margin: 0;
+  color: var(--cream);
+  font-size: calc(var(--u) * 21);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.conduzidos {
+  display: flex;
+  align-items: flex-start;
+  gap: calc(var(--u) * 20);
+}
+
+.conduzidos__avatares {
+  flex: none;
+  width: calc(var(--u) * 190);
+  height: auto;
+  margin-top: calc(var(--u) * 6);
+}
+
+.conduzidos__nomes {
+  margin: 0;
+  color: var(--cream);
+  font-size: calc(var(--u) * 25);
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+.arenas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: calc(var(--u) * 16);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.arena {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: calc(var(--u) * 16);
+  background: var(--surface-card);
+}
+
+.arena img {
+  width: 100%;
+  height: auto;
+}
+
+.arena__nome {
+  margin: 0;
+  padding: calc(var(--u) * 20) calc(var(--u) * 18) calc(var(--u) * 22);
+  color: var(--white);
+  font-size: calc(var(--u) * 26);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Card creme — leve seu time */
+
+.time {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 20);
+  padding: calc(var(--u) * 36);
+  border-radius: calc(var(--u) * 24);
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.time__eyebrow {
+  margin: 0;
+  color: var(--cream-muted);
+  font-size: calc(var(--u) * 22);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.time__texto {
+  margin: 0;
+  font-size: calc(var(--u) * 30);
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+.time__linha {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: calc(var(--u) * 32);
+  flex-wrap: wrap;
+}
+
+.time__contato { display: flex; flex-direction: column; gap: calc(var(--u) * 4); }
+
+.time__nome {
+  margin: 0;
+  font-size: calc(var(--u) * 34);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.time__cargo {
+  margin: 0 0 calc(var(--u) * 10);
+  color: var(--cream-muted);
+  font-size: calc(var(--u) * 24);
+  font-weight: 700;
+}
+
+.time__dado {
+  margin: 0;
+  font-size: calc(var(--u) * 26);
+  line-height: 1.4;
+}
+
+.time__dado a { color: var(--ink); text-decoration: underline; }
+
+.time__acoes {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 14);
+}
+
+/* Botões */
+
+.botao-escuro,
+.botao-linha {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--u) * 14);
+  padding: calc(var(--u) * 22) calc(var(--u) * 36);
+  border-radius: calc(var(--u) * 100);
+  font-size: calc(var(--u) * 27);
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+
+.botao-escuro { background: var(--ink); color: var(--white); }
+.botao-escuro:hover { background: #1a1b22; }
+.botao-escuro__icone { width: calc(var(--u) * 30); height: calc(var(--u) * 30); color: var(--green); }
+
+.botao-linha {
+  border: var(--hairline) solid var(--hairline-40);
+  background: transparent;
+  color: var(--white);
+}
+.botao-linha:hover { border-color: var(--green); color: var(--green); }
+
+.botao-linha--claro { border-color: rgba(11, 11, 15, 0.35); color: var(--ink); }
+.botao-linha--claro:hover { border-color: var(--ink); background: rgba(11, 11, 15, 0.06); color: var(--ink); }
+
+/* ============================================================
+   Desktop — conteúdo centralizado, line-up em 4 colunas
+   ============================================================ */
+
+@media (min-width: 900px) and (min-aspect-ratio: 1/1) {
+  .pagina-maslach { --u: min(calc(100vw / 1240), 1px); }
+
+  .tela__conteudo { max-width: calc(var(--u) * 1240); }
+
+  .lineup { grid-template-columns: repeat(4, 1fr); }
+
+  .tela--convite .hero__foto { bottom: calc(var(--u) * 150); }
+
+  .time__acoes { flex-direction: row; }
+}

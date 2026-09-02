@@ -35,6 +35,12 @@
   --overlay: rgba(5, 5, 8, 0.84);
   --input-fill: rgba(11, 11, 15, 0.6);
 
+  /* Tokens do convite da Christina (medidos no PDF) */
+  --purple: #9843ff;            /* Flow — pílula de masterclass, tile */
+  --cream: #faf4d0;             /* tile da Sonja e card "leve seu time" */
+  --surface-soft: #151419;      /* card de benefícios */
+  --surface-card: #1f1f29;      /* cards internos */
+
   --font: "Satoshi", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
   /* 1px do canvas de 1080 × 1920, escalado para caber no viewport */
@@ -67,13 +73,15 @@ html, body { height: 100%; }
 
 body {
   margin: 0;
-  overflow: hidden;
   background: var(--page);
   color: var(--white);
   font-family: var(--font);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Só o convite de uma tela trava o scroll; as páginas que rolam não. */
+body.poster-lock { overflow: hidden; }
 
 img { display: block; }
 
@@ -509,6 +517,8 @@ button {
   grid-template-columns: 1fr 1fr;
   gap: calc(var(--mu) * 26);
 }
+
+.field--largo { grid-column: 1 / -1; }
 
 .field {
   display: flex;

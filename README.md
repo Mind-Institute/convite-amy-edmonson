@@ -1,10 +1,15 @@
-# Convite — Almoço CHROs com Amy Edmondson
+# Convites — Almoços fechados do Mind Summit 2026
 
-Peça de convite digital para o almoço fechado com **Amy Edmondson** em **16 de setembro, 13h30**,
-durante o **Mind Summit 2026**, oferecido em parceria com a Wellz by Wellhub.
+Duas peças de convite digital para os almoços fechados com **Amy Edmondson** (16/09) e
+**Christina Maslach** (17/09), reservados a um grupo restrito de CHROs, durante o Mind Summit 2026.
 
-O convite tem dois layouts — pôster **1080 × 1920** (9:16) em telas verticais e um layout de duas
-colunas em desktop — e um modal de confirmação de presença com seis campos obrigatórios.
+| Rota | O que é |
+|---|---|
+| `/` | Home: seleção entre os dois convites |
+| `/amy-edmondson` | Convite da Amy — pôster 1080 × 1920 (9:16) numa tela |
+| `/cristina-maslach` | Convite da Christina — três telas de scroll (convite, line-up, "não é só palestra") |
+
+Publicado em `https://convite.mindsummit.company`.
 
 ## Como rodar
 
@@ -14,129 +19,102 @@ Site estático, sem build. `public/` é a raiz do site:
 npm start            # ou: npx serve public
 ```
 
-Depois abra `http://localhost:3000`.
-
 ## Estrutura
 
 `public/` é o que vai para o ar. Tudo fora dele é fonte, ferramenta ou referência.
 
 | Arquivo | O que é |
 |---|---|
-| `public/index.html` | Marcação do convite e do modal |
-| `public/styles.css` | Design system (tokens), layout do canvas e do modal |
-| `public/script.js` | Estado do modal, máscara de WhatsApp e envio do RSVP |
-| `public/assets/` | Imagens da peça e a thumbnail de link gerada |
-| `tools/og-image.html` | Fonte da thumbnail de link (1200 × 630) — não é uma página do site |
-| `tools/og-image.mjs` | Rasteriza `tools/og-image.html` em `public/assets/og-image.png` |
-| `wrangler.jsonc` | Config de deploy (Cloudflare Workers Static Assets) |
-| `docs/handoff/` | Handoff de design original (referência: medidas, cores e copy aprovada) |
+| `public/index.html` + `assets/css/home.css` | Home |
+| `public/amy-edmondson/index.html` | Convite da Amy |
+| `public/cristina-maslach/index.html` + `assets/css/maslach.css` | Convite da Christina |
+| `public/styles.css` | Design system (tokens) + canvas do pôster + modal e formulário, compartilhados |
+| `public/script.js` | Modal, máscaras, validação e envio do RSVP — compartilhado pelas duas páginas |
+| `public/assets/` | Imagens |
+| `tools/og-image.html` + `tools/og-image.mjs` | Thumbnail de link (1200 × 630) |
+| `wrangler.jsonc` | Deploy (Cloudflare Workers Static Assets) |
+| `docs/handoff/` | Handoff de design do convite da Amy |
+
+## Confirmações de presença (RSVP)
+
+Vão para a tabela `rsvps` do Supabase (projeto `qokdydgdovswjalpummr`), com as colunas
+`nome`, `sobrenome`, `empresa`, `cargo`, `email`, `whatsapp`, `cpf` e `convite` —
+`convite` é preenchido pela própria página (`data-convite` no `<body>`), então dá para separar
+quem confirmou em qual almoço.
+
+**A chave no `script.js` é a publicável (anon), e ela é feita para ficar exposta no navegador.**
+A proteção não é a chave: é o RLS. `anon` tem só o privilégio de `INSERT` — nem `SELECT`, nem
+`UPDATE`, nem `DELETE`, e a única policy da tabela é de inserção. Com a chave que está no site
+**não se lê a lista de convidados**. Para ler, use o painel do Supabase ou a `service_role`.
+
+Outras defesas na própria tabela: `convite` só aceita os dois nomes válidos, o e-mail passa por
+regex, o CPF precisa ter 11 dígitos e todo campo tem limite de tamanho (a escrita é pública).
+
+O CPF é guardado **só com dígitos**, sem pontuação — a página mostra mascarado e envia limpo. O
+formulário confere os dígitos verificadores, o que pega erro de digitação, mas ninguém consulta a
+Receita: trate como declarado pelo convidado.
+
+Duplicatas são possíveis (o mesmo convidado pode enviar duas vezes) — deduplique por
+`(lower(email), convite)` na leitura.
+
+> Como são dados pessoais (CPF inclusive), vale alinhar com quem cuida de LGPD aí por quanto tempo
+> a lista fica guardada e quem tem acesso ao projeto.
 
 ## Deploy
 
 Cloudflare Workers, servindo `public/` como static assets — sem Worker script e sem build step.
-O `wrangler.jsonc` é o que o build lê; sem ele o `wrangler` falha com
-*"Missing entry-point to Worker script or to assets directory"*.
-
 Dois pontos de atenção na configuração da Cloudflare:
 
 - **`name` precisa bater com o nome do Worker** já ligado a este repositório no painel. Está como
-  `convite-amy-edmonson`; se lá for outro, troque no `wrangler.jsonc` — senão o build publica num
-  Worker diferente.
-- **`npx wrangler versions upload` só sobe uma versão, não coloca no ar.** É o comando certo para
-  branch de preview; para a branch de produção o comando precisa ser `npx wrangler deploy` (ou
-  promover a versão pelo painel).
-
-O site não depende da Cloudflare: `public/` é HTML estático puro e roda igual em GitHub Pages,
-Vercel, Netlify ou S3, apontando a raiz de publicação para `public/`.
+  `convite-amy-edmonson`; se lá for outro, troque no `wrangler.jsonc`.
+- **`npx wrangler versions upload` só sobe uma versão, não coloca no ar.** Para a branch de
+  produção o comando precisa ser `npx wrangler deploy` (ou promover a versão pelo painel).
 
 ## Decisões de implementação
 
-**Stack.** O repositório não tinha ambiente. Como a peça é uma página estática única distribuída
-por link (e-mail/WhatsApp), foi implementada em HTML + CSS + JS sem build — carrega rápido, não
-tem dependência para manter e publica em qualquer lugar. Se o convite virar parte de um app maior,
-o markup mapeia direto para um componente React/Vue.
+**Stack.** HTML + CSS + JS sem build — as peças são páginas estáticas distribuídas por link, e
+assim publicam em qualquer lugar sem dependência para manter.
 
-**Escala do canvas.** Em vez de fixar 1080 × 1920, todas as medidas do handoff são escritas como
-`calc(var(--u) * N)`, onde `--u` é o tamanho de 1px do canvas no viewport atual:
+**Escala.** Todas as medidas dos handoffs são escritas como `calc(var(--u) * N)`, onde `--u` é o
+tamanho de 1px do canvas de 1080 no viewport atual. O que muda entre as peças é como `--u` é
+calculado:
 
-```css
---u: min(calc(100vw / 1080), calc(100svh / 1920), 1px);
-```
+- **Amy** é um pôster de uma tela só, então `--u` é limitado pela altura *e* pela largura — a peça
+  inteira cabe na tela, cheia num celular 9:16 e centralizada no desktop.
+- **Christina e a home** rolam, então `--u` é guiado só pela largura.
 
-A peça escala proporcionalmente e continua pixel-perfect em relação ao design em qualquer tela —
-tela cheia num celular 9:16, centralizada com bordas no desktop. O teto de `1px` evita ampliar
-ainda mais a foto da Amy, que já é renderizada acima da resolução nativa.
+**Layout desktop.** Em landscape ≥ 900px o pôster da Amy vira um grid de duas colunas; a página da
+Christina centraliza o conteúdo e o line-up passa de 2×2 para 4 colunas.
 
-**Layout desktop.** Em telas landscape com 900px ou mais (`min-width: 900px` e
-`min-aspect-ratio: 1/1`), o pôster letterboxado dá lugar a um layout de duas colunas que ocupa a
-largura da tela: à esquerda título, lead e o bloco de data + CTA; à direita a bio da Amy e a foto,
-que encosta na base como no pôster. A média query só redefine `--u` e o arranjo do grid — os
-tokens, as cores e a hierarquia continuam os mesmos, e o `--u` fica mais preso à altura que à
-largura para o convite tentar caber numa tela só. Telas verticais (celular, tablet em retrato)
-continuam no pôster 9:16, que num celular ocupa a tela inteira.
+**Além dos protótipos.** Foco preso no modal, `Esc`, `inert` no fundo, retorno de foco ao CTA,
+máscaras de WhatsApp e CPF, estados de enviando/sucesso/erro e `prefers-reduced-motion`.
 
-A foto é um recorte que corta reto na altura do peito. No pôster essa borda encosta na divisória e
-some; no desktop ela ficaria flutuando, então um `mask-image` dissolve o corte no fundo.
+## Pendências
 
-**Modal fora do canvas.** O modal é uma camada `fixed` separada, com unidade própria
-`--mu: clamp(0.62px, var(--u), 1px)`. O piso garante campos com no mínimo 16px (abaixo disso o iOS
-dá zoom ao focar o input) e o teto evita que ele cresça além da escala de design em telas grandes.
-Abaixo de 720px o grid vira uma coluna e o rodapé do form empilha, como previsto no handoff.
+**Assets da página da Christina.** O material recebido foi um PDF achatado (três JPEGs de
+1080 × 1920, texto queimado por cima das imagens), não um handoff com os arquivos soltos. Os tiles
+do line-up, as arenas e os avatares foram recortados dali e ficam corretos em 1×, mas sem folga
+para telas retina.
 
-**Além do protótipo.** Foram adicionados: foco preso no modal, `Esc` para fechar, `inert` no fundo,
-retorno de foco ao CTA, máscara `(00) 00000-0000` no WhatsApp, estados de `enviando` / `sucesso` /
-`erro`, e `prefers-reduced-motion`.
+- **A foto da Christina no hero é um placeholder** (`christina-maslach-PLACEHOLDER.png`): o texto
+  do convite estava queimado por cima dela, então só a faixa à direita saiu limpa e a borda
+  esquerda é dissolvida por um `mask`. Pedir o recorte original com fundo transparente, como o da
+  Amy, e trocar o arquivo.
+- Os demais recortes ganham qualidade se vierem os originais.
 
-## Envio do RSVP — pendente
+**Fonte Satoshi.** Carregada da Fontshare. Trocar pelos `.woff2` licenciados que o Mind self-hosta
+(também remove a dependência de CDN de terceiros).
 
-Hoje o formulário cai no `mailto:` do protótipo (`contato@joinmind.com.br`), que depende do
-cliente de e-mail do convidado. O fluxo real já está implementado: basta preencher a constante no
-topo de `script.js`.
+**Thumbnail de link.** `public/assets/og-image.png` foi gerada sem a Satoshi (a Fontshare estava
+bloqueada no ambiente em que rodou), então saiu com a fonte de fallback. Rodar `npm run og` numa
+máquina com acesso à Fontshare e commitar. Falta também uma thumbnail própria da página da
+Christina — hoje ela reusa a da Amy.
 
-```js
-var RSVP_ENDPOINT = null;  // ex.: 'https://formspree.io/f/xxxxxxx'
-```
+**URLs a confirmar.** "Ver programação completa" e "Por que levar meu time?" apontam para
+`https://mindsummit.company/` como palpite; confirmar os destinos certos.
 
-Com o endpoint definido, `sendRsvp()` faz `POST` de JSON
-(`nome`, `sobrenome`, `empresa`, `cargo`, `email`, `whatsapp`, `evento`), mostra `Enviando…` no
-botão, o painel **Presença confirmada** em caso de sucesso e uma mensagem de erro com retry se
-falhar. Opções discutidas com o cliente, em ordem de esforço: Formspree/Basin → Google Forms →
-RD Station/HubSpot → endpoint próprio.
-
-## Thumbnail de link (WhatsApp)
-
-`public/assets/og-image.png` (1200 × 630) é a imagem que aparece no preview quando o link é colado no
-WhatsApp, no e-mail ou no Slack. A fonte dela é `tools/og-image.html`, uma composição landscape separada
-— não um recorte do pôster, que em 9:16 seria cortado pelo crawler.
-
-```bash
-npm install      # Playwright, só para este script
-npm run og       # tools/og-image.html -> public/assets/og-image.png
-```
-
-O script avisa e sai com código 1 se a Satoshi não tiver carregado, para não gerar um PNG com a
-tipografia errada sem ninguém perceber.
-
-Ao publicar, dois ajustes:
-
-1. **`og:image` precisa virar URL absoluta** em `public/index.html` (o WhatsApp não resolve caminho
-   relativo de forma confiável). Há dois lugares: `og:image` e `twitter:image`.
-2. A página está com `<meta name="robots" content="noindex, nofollow">`, porque o convite é
-   pessoal e não deve ir para busca. Crawlers de preview normalmente ignoram esse meta, mas se o
-   preview não aparecer, é a primeira coisa a testar.
-
-## Pendências de marca
-
-Herdadas do handoff, antes de ir para produção:
-
-- **Fonte Satoshi** é carregada da Fontshare. Trocar pelos `.woff2` licenciados que o Mind
-  self-hosta (também remove a dependência de CDN de terceiros).
-- **`assets/summit-lockup.png`** foi recolorido para branco por script — pedir o lockup branco
-  oficial ao time de marca.
-- **`assets/amy-edmondson.png`** tem só 380px de largura e é renderizada a 620px — pedir arquivo
-  em resolução maior.
-- **`public/assets/og-image.png` foi gerada sem a Satoshi** (a Fontshare estava bloqueada no ambiente em
-  que rodou), então saiu com a fonte de fallback. Rodar `npm run og` uma vez numa máquina com
-  acesso à Fontshare e commitar o PNG antes de distribuir o link.
+**Grafia do nome.** O PDF traz **Christina** Maslach (com "h"), que é a grafia correta da
+pesquisadora; a rota pedida foi `/cristina-maslach`. O texto das páginas usa "Christina" e a URL
+ficou como pedida — vale decidir se a URL acompanha.
 
 A copy em pt-BR foi aprovada pelo cliente palavra por palavra — **não reescrever**.

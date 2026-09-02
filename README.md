@@ -128,7 +128,8 @@ junto mas não corresponde a nenhum bloco do PDF, então está guardado sem uso 
 ambiente em que rodaram), então saíram com a fonte de fallback. Rodar `npm run og` numa máquina
 com acesso à Fontshare e commitar os PNGs.
 
-**URLs a confirmar.** "Ver programação completa" e "Por que levar meu time?" apontam para
-`https://mindsummit.company/` como palpite; confirmar os destinos certos.
+**Botão sem destino.** "Por que levar meu time?", na tela 3 do convite da Christina, é um
+`<button>` sem ação — aparece com o visual normal e não faz nada ao clique, como pedido até haver
+uma página de destino. Quando houver, virar um `<a href="...">` como o botão ao lado.
 
 A copy em pt-BR foi aprovada pelo cliente palavra por palavra — **não reescrever**.

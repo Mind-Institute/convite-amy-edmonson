@@ -81,6 +81,8 @@ body {
 }
 
 /* Só o convite de uma tela trava o scroll; as páginas que rolam não. */
+/* Trava o scroll no pôster de uma tela só. O layout desktop reverte
+   isso mais abaixo — lá o conteúdo pode passar da altura da tela. */
 body.poster-lock { overflow: hidden; }
 
 img { display: block; }
@@ -718,7 +720,10 @@ button {
     --u: clamp(0.72px, min(calc(100vw / 1560), calc(100vh / 1200)), 1.15px);
   }
 
-  body {
+  /* `body.poster-lock` também, senão a especificidade dele mantém o
+     overflow:hidden e o rodapé fica inalcançável em telas mais baixas. */
+  body,
+  body.poster-lock {
     overflow-x: hidden;
     overflow-y: auto;
   }

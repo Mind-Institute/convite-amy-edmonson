@@ -11,6 +11,11 @@
    altura, e as seções têm altura automática.
    ============================================================ */
 
+.pagina-maslach .header__lockup {
+  height: calc(var(--u) * 42);
+  width: auto;
+}
+
 .pagina-maslach {
   --u: min(calc(100vw / 1080), 1px);
   --cream-muted: #403828;
@@ -72,17 +77,16 @@
    dissolvida pelo mask. */
 .tela--convite .intro__title { max-width: calc(var(--u) * 780); }
 .tela--convite .intro__lead { max-width: calc(var(--u) * 600); }
+.palestrante, .quando { max-width: calc(var(--u) * 470); }
 
+/* Recorte oficial, com fundo transparente — sangra na margem direita
+   como no PDF. Não precisa de mask: a borda já é limpa. */
 .hero__foto {
   position: absolute;
-  right: 0;
-  bottom: calc(var(--u) * 172);
-  width: calc(var(--u) * 476);
+  right: calc(var(--u) * -30);
+  bottom: calc(var(--u) * 168);
+  width: calc(var(--u) * 660);
   height: auto;
-  /* O recorte do PDF corta reto à esquerda (o texto estava queimado
-     por cima da foto): o mask dissolve essa borda no fundo. */
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 22%);
-  mask-image: linear-gradient(to right, transparent 0%, #000 22%);
 }
 
 .tela--convite .intro__title { font-size: calc(var(--u) * 92); }
@@ -91,7 +95,6 @@
   display: flex;
   flex-direction: column;
   gap: calc(var(--u) * 18);
-  max-width: calc(var(--u) * 560);
 }
 
 .palestrante__nome {
@@ -129,11 +132,11 @@
   gap: calc(var(--u) * 14);
   padding-top: calc(var(--u) * 34);
   border-top: var(--hairline) solid var(--hairline-30);
-  max-width: calc(var(--u) * 560);
 }
 
 .quando__local {
   margin: 0 0 calc(var(--u) * 12);
+  max-width: calc(var(--u) * 420);
   color: var(--text-70);
   font-size: calc(var(--u) * 26);
   line-height: 1.4;

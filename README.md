@@ -112,17 +112,14 @@ tipografia errada sem ninguém perceber.
 
 ## Pendências
 
-**Assets da página da Christina.** O material recebido foi um PDF achatado (três JPEGs de
-1080 × 1920, texto queimado por cima das imagens), não um handoff com os arquivos soltos. Os tiles
-do line-up, as arenas e os avatares foram recortados dali e ficam corretos em 1×, mas sem folga
-para telas retina.
+**Assets da página da Christina.** O material inicial foi um PDF achatado (três JPEGs de
+1080 × 1920, com o texto queimado por cima das imagens), não um handoff com os arquivos soltos. A
+foto dela e o lockup horizontal já vieram nos originais; os tiles do line-up, as arenas e os
+avatares seguem recortados do PDF — ficam corretos em 1×, mas sem folga para telas retina. Ganham
+qualidade se vierem os arquivos soltos.
 
-- **A foto da Christina é um placeholder** (`christina-maslach-PLACEHOLDER.png`), usada no hero e
-  na thumbnail: o texto do convite estava queimado por cima dela, então só a faixa à direita da
-  imagem saiu limpa e a borda esquerda é dissolvida por um `mask`. Pedir o recorte original com
-  fundo transparente, como o da Amy — trocar o arquivo corrige a página e a thumbnail de uma vez
-  (rodando `npm run og` depois).
-- Os demais recortes ganham qualidade se vierem os originais.
+`public/assets/christina-maslach-selo.webp` (o selo em fundo creme com o anel "mind summit") veio
+junto mas não corresponde a nenhum bloco do PDF, então está guardado sem uso — dizer se tem lugar.
 
 **Fonte Satoshi.** Carregada da Fontshare. Trocar pelos `.woff2` licenciados que o Mind self-hosta
 (também remove a dependência de CDN de terceiros).

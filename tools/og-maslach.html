@@ -65,19 +65,11 @@
      então o mask dissolve a borda no fundo. */
   .og__photo {
     position: absolute;
-    right: 0;
-    bottom: -40px;
-    width: 356px;
+    right: -10px;
+    bottom: -46px;
+    width: 430px;
     height: auto;
     display: block;
-    /* PLACEHOLDER: recorte tirado do PDF, corta reto à esquerda.
-       O mask dissolve a borda esquerda e a base no fundo. */
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 26%),
-                        linear-gradient(to bottom, #000 88%, transparent 100%);
-    -webkit-mask-composite: source-in;
-    mask-image: linear-gradient(to right, transparent 0%, #000 26%),
-                linear-gradient(to bottom, #000 88%, transparent 100%);
-    mask-composite: intersect;
   }
 
   .og__content {
@@ -92,7 +84,7 @@
   .og__lockup {
     align-self: flex-start;
     flex: none;
-    height: 66px;
+    height: 40px;
     width: auto;
     display: block;
   }
@@ -179,7 +171,7 @@
     gap: 28px;
     padding-top: 26px;
     border-top: 1px solid rgba(143, 143, 163, 0.25);
-    max-width: 730px;
+    max-width: 690px;
   }
 
   .og__seal {
@@ -218,10 +210,10 @@
   <div class="og__glow og__glow--green"></div>
   <div class="og__glow og__glow--purple"></div>
 
-  <img class="og__photo" src="../public/assets/christina-maslach-PLACEHOLDER.png" alt="">
+  <img class="og__photo" src="../public/assets/christina-maslach.webp" alt="">
 
   <div class="og__content">
-    <img class="og__lockup" src="../public/assets/summit-lockup.png" alt="Mind Summit 2026">
+    <img class="og__lockup" src="../public/assets/summit-lockup-horizontal.webp" alt="Mind Summit 2026">
 
     <div class="og__main">
       <div class="og__eyebrow">

@@ -1,0 +1,73 @@
+{
+  "name": "RSVP Mind Summit — e-mail para o Thiago",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "rsvp-mind-summit",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000001",
+      "name": "Webhook RSVP",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-200, 0],
+      "webhookId": "a1000000-0000-4000-8000-000000000001"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "segredo",
+              "leftValue": "={{ $json.headers['x-webhook-secret'] }}",
+              "rightValue": "TROQUE-PELO-SEGREDO",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000002",
+      "name": "Confere o segredo",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [40, 0]
+    },
+    {
+      "parameters": {
+        "fromEmail": "no-reply@joinmind.com.br",
+        "toEmail": "thiago@joinmind.com.br",
+        "subject": "=Nova confirmação — {{ $json.body.convite }} — {{ $json.body.nome_completo }} ({{ $json.body.empresa }})",
+        "html": "=<div style=\"font-family:system-ui,Arial,sans-serif;max-width:560px\">\n  <p style=\"font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#68805f;margin:0 0 4px\">Almoço fechado · {{ $json.body.convite }}</p>\n  <h2 style=\"margin:0 0 16px;font-size:22px\">{{ $json.body.nome_completo }} confirmou presença</h2>\n  <table cellpadding=\"6\" style=\"border-collapse:collapse;font-size:15px\">\n    <tr><td style=\"color:#666\">Empresa</td><td><b>{{ $json.body.empresa }}</b></td></tr>\n    <tr><td style=\"color:#666\">Cargo</td><td>{{ $json.body.cargo }}</td></tr>\n    <tr><td style=\"color:#666\">E-mail</td><td><a href=\"mailto:{{ $json.body.email }}\">{{ $json.body.email }}</a></td></tr>\n    <tr><td style=\"color:#666\">WhatsApp</td><td>{{ $json.body.whatsapp }}</td></tr>\n    <tr><td style=\"color:#666\">CPF</td><td>{{ $json.body.cpf_formatado }}</td></tr>\n    <tr><td style=\"color:#666\">Recebido em</td><td>{{ $json.body.criado_em }}</td></tr>\n  </table>\n</div>",
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000003",
+      "name": "E-mail para o Thiago",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [280, -100]
+    }
+  ],
+  "connections": {
+    "Webhook RSVP": {
+      "main": [[{ "node": "Confere o segredo", "type": "main", "index": 0 }]]
+    },
+    "Confere o segredo": {
+      "main": [
+        [{ "node": "E-mail para o Thiago", "type": "main", "index": 0 }],
+        []
+      ]
+    }
+  },
+  "settings": { "executionOrder": "v1" },
+  "pinData": {}
+}

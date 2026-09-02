@@ -35,6 +35,7 @@ npm start            # ou: npx serve public
 | `tools/og-home.html`, `tools/og-edmondson.html`, `tools/og-maslach.html` | Fontes das thumbnails de link (1200 × 630) |
 | `tools/og-image.mjs` | Rasteriza as duas em `public/assets/og-image*.png` |
 | `wrangler.jsonc` | Deploy (Cloudflare Workers Static Assets) |
+| `tools/n8n-rsvp-email.json` | Fluxo do n8n que manda o e-mail a cada confirmação |
 | `docs/handoff/` | Handoff de design do convite da Amy |
 
 ## Confirmações de presença (RSVP)
@@ -125,6 +126,43 @@ zero recursos externos.
 > A Satoshi não tem os glifos `º` e `ª`. Eles aparecem duas vezes na página da Amy ("nº 1" e
 > "2º andar") e caem na fonte de sistema do visitante — na prática passa despercebido, mas se
 > incomodar, o caminho é pedir um corte mais completo ao time de marca.
+
+## Aviso por e-mail a cada confirmação
+
+Um gatilho `AFTER INSERT` em `rsvps` faz POST da linha nova num webhook do n8n, que manda o e-mail
+para o Thiago. A URL e o segredo ficam em `public.integracoes` — tabela com RLS ligada, **sem
+policy nenhuma** e com os grants revogados, ou seja, só `service_role` enxerga (ela guarda um
+segredo, não pode vazar pela chave pública do site).
+
+Ligar/desligar é um UPDATE, não uma migration. **URL vazia = gatilho não faz nada:**
+
+```sql
+update public.integracoes set valor = 'https://SEU-N8N/webhook/rsvp-mind-summit'
+ where chave = 'n8n_rsvp_webhook_url';
+update public.integracoes set valor = 'um-segredo-qualquer'
+ where chave = 'n8n_rsvp_webhook_segredo';
+```
+
+`tools/n8n-rsvp-email.json` é o fluxo pronto para importar no n8n (Webhook → confere o header
+`x-webhook-secret` → envia o e-mail). Depois de importar: trocar `TROQUE-PELO-SEGREDO`, escolher a
+credencial de SMTP no nó de e-mail, ativar, e copiar a Production URL do webhook.
+
+O corpo que chega no webhook:
+
+```json
+{
+  "id": "uuid", "criado_em": "2026-09-02T16:21:57Z",
+  "convite": "Amy Edmondson",
+  "nome": "Ana", "sobrenome": "Souza", "nome_completo": "Ana Souza",
+  "empresa": "Acme", "cargo": "CHRO",
+  "email": "ana@acme.com", "whatsapp": "(11) 98765-4321",
+  "cpf": "11144477735", "cpf_formatado": "111.444.777-35"
+}
+```
+
+> O `pg_net` é assíncrono e não tem retentativa: se o n8n estiver fora do ar na hora, aquele
+> e-mail se perde — mas a confirmação não, ela já está gravada. O banco é a fonte de verdade; o
+> e-mail é só aviso.
 
 ## Pendências
 

@@ -447,6 +447,7 @@
 .time__dado {
   margin: 0;
   font-size: calc(var(--u) * 26);
+  font-weight: 700;
   line-height: 1.4;
 }
 

@@ -17,6 +17,7 @@ import { statSync } from 'node:fs';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 const PECAS = [
+  { fonte: 'tools/og-home.html', saida: 'public/assets/og-image-home.png' },
   { fonte: 'tools/og-edmondson.html', saida: 'public/assets/og-image.png' },
   { fonte: 'tools/og-maslach.html', saida: 'public/assets/og-image-maslach.png' }
 ];

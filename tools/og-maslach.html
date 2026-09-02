@@ -11,9 +11,16 @@
   Formato 1200 × 630 (1.91:1) — o que o WhatsApp usa para o card
   grande de link. Ao editar, rode `npm run og` para regerar o PNG.
 -->
-<link rel="preconnect" href="https://api.fontshare.com">
-<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
-<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f%5B%5D=satoshi@400,700,900&amp;display=block">
+<style>
+  /* Satoshi self-hospedada — mesma fonte das páginas, sem depender da CDN */
+  @font-face {
+    font-family: "Satoshi";
+    src: url("../public/assets/fonts/Satoshi-Variable.woff2") format("woff2-variations");
+    font-weight: 300 900;
+    font-style: normal;
+    font-display: block;
+  }
+</style>
 <style>
   :root {
     --ink: #0b0b0f;

@@ -31,7 +31,8 @@ npm start            # ou: npx serve public
 | `public/styles.css` | Design system (tokens) + canvas do pôster + modal e formulário, compartilhados |
 | `public/script.js` | Modal, máscaras, validação e envio do RSVP — compartilhado pelas duas páginas |
 | `public/assets/` | Imagens |
-| `tools/og-edmondson.html`, `tools/og-maslach.html` | Fontes das thumbnails de link (1200 × 630) |
+| `public/assets/fonts/` | Satoshi variável, self-hospedada |
+| `tools/og-home.html`, `tools/og-edmondson.html`, `tools/og-maslach.html` | Fontes das thumbnails de link (1200 × 630) |
 | `tools/og-image.mjs` | Rasteriza as duas em `public/assets/og-image*.png` |
 | `wrangler.jsonc` | Deploy (Cloudflare Workers Static Assets) |
 | `docs/handoff/` | Handoff de design do convite da Amy |
@@ -92,10 +93,11 @@ máscaras de WhatsApp e CPF, estados de enviando/sucesso/erro e `prefers-reduced
 
 ## Thumbnails de link (WhatsApp)
 
-Cada convite tem a sua, em 1200 × 630 — o formato que o WhatsApp usa no card grande de link:
+Cada página tem a sua, em 1200 × 630 — o formato que o WhatsApp usa no card grande de link:
 
 | Página | Thumbnail | Fonte |
 |---|---|---|
+| `/` | `public/assets/og-image-home.png` | `tools/og-home.html` |
 | `/amy-edmondson` | `public/assets/og-image.png` | `tools/og-edmondson.html` |
 | `/christina-maslach` | `public/assets/og-image-maslach.png` | `tools/og-maslach.html` |
 
@@ -104,11 +106,25 @@ e sobraria o meio dela.
 
 ```bash
 npm install      # Playwright, só para este script
-npm run og       # gera as duas
+npm run og       # gera as três
 ```
 
 O script avisa e sai com código 1 se a Satoshi não tiver carregado, para não gerar PNG com a
-tipografia errada sem ninguém perceber.
+tipografia errada sem ninguém perceber. Com a fonte self-hospedada isso não depende mais de rede.
+
+> `npm install` **não** baixa o navegador — o pacote `playwright` não tem `postinstall`. Rode
+> `npx playwright install chromium` uma vez antes do primeiro `npm run og`.
+
+## Fonte
+
+A Satoshi é **self-hospedada** em `public/assets/fonts/Satoshi-Variable.woff2` — arquivo variável
+(eixo de peso 300–900, cobrindo os 400/500/700/900 do design), convertido do `.ttf` licenciado que
+o Mind usa. 41 KB. Não há mais nenhuma requisição a CDN de terceiro: as três páginas carregam com
+zero recursos externos.
+
+> A Satoshi não tem os glifos `º` e `ª`. Eles aparecem duas vezes na página da Amy ("nº 1" e
+> "2º andar") e caem na fonte de sistema do visitante — na prática passa despercebido, mas se
+> incomodar, o caminho é pedir um corte mais completo ao time de marca.
 
 ## Pendências
 
@@ -120,13 +136,6 @@ qualidade se vierem os arquivos soltos.
 
 `public/assets/christina-maslach-selo.webp` (o selo em fundo creme com o anel "mind summit") veio
 junto mas não corresponde a nenhum bloco do PDF, então está guardado sem uso — dizer se tem lugar.
-
-**Fonte Satoshi.** Carregada da Fontshare. Trocar pelos `.woff2` licenciados que o Mind self-hosta
-(também remove a dependência de CDN de terceiros).
-
-**Thumbnails de link.** As duas foram geradas sem a Satoshi (a Fontshare estava bloqueada no
-ambiente em que rodaram), então saíram com a fonte de fallback. Rodar `npm run og` numa máquina
-com acesso à Fontshare e commitar os PNGs.
 
 **Botão sem destino.** "Por que levar meu time?", na tela 3 do convite da Christina, é um
 `<button>` sem ação — aparece com o visual normal e não faz nada ao clique, como pedido até haver

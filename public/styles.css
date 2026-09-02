@@ -9,6 +9,19 @@
    pixel-perfect em relação ao design.
    ============================================================ */
 
+/* ---------- Satoshi (self-hospedada) ----------
+   Variável, eixo de peso 300–900, cobrindo os 400/500/700/900 que o
+   design usa. Substitui a CDN da Fontshare: menos um terceiro no
+   caminho entre o convidado e o convite.  */
+
+@font-face {
+  font-family: "Satoshi";
+  src: url("assets/fonts/Satoshi-Variable.woff2") format("woff2-variations");
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ---------- Tokens ---------- */
 
 :root {

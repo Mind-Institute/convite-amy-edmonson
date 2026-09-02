@@ -64,7 +64,7 @@
 .entrar__lockup {
   align-self: flex-start;   /* sem isso o flex estica e deforma o lockup */
   flex: none;
-  height: 28px;
+  height: 44px;
   width: auto;
 }
 
@@ -177,7 +177,7 @@
 }
 
 .painel__marca { display: flex; align-items: center; gap: 18px; }
-.painel__marca img { flex: none; height: 24px; width: auto; }
+.painel__marca img { flex: none; height: 34px; width: auto; }
 
 .painel__marca h1 {
   margin: 0;

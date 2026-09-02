@@ -7,7 +7,7 @@ Duas peças de convite digital para os almoços fechados com **Amy Edmondson** (
 |---|---|
 | `/` | Home: seleção entre os dois convites |
 | `/amy-edmondson` | Convite da Amy — pôster 1080 × 1920 (9:16) numa tela |
-| `/cristina-maslach` | Convite da Christina — três telas de scroll (convite, line-up, "não é só palestra") |
+| `/christina-maslach` | Convite da Christina — três telas de scroll (convite, line-up, "não é só palestra") |
 
 Publicado em `https://convite.mindsummit.company`.
 
@@ -27,11 +27,12 @@ npm start            # ou: npx serve public
 |---|---|
 | `public/index.html` + `assets/css/home.css` | Home |
 | `public/amy-edmondson/index.html` | Convite da Amy |
-| `public/cristina-maslach/index.html` + `assets/css/maslach.css` | Convite da Christina |
+| `public/christina-maslach/index.html` + `assets/css/maslach.css` | Convite da Christina |
 | `public/styles.css` | Design system (tokens) + canvas do pôster + modal e formulário, compartilhados |
 | `public/script.js` | Modal, máscaras, validação e envio do RSVP — compartilhado pelas duas páginas |
 | `public/assets/` | Imagens |
-| `tools/og-image.html` + `tools/og-image.mjs` | Thumbnail de link (1200 × 630) |
+| `tools/og-edmondson.html`, `tools/og-maslach.html` | Fontes das thumbnails de link (1200 × 630) |
+| `tools/og-image.mjs` | Rasteriza as duas em `public/assets/og-image*.png` |
 | `wrangler.jsonc` | Deploy (Cloudflare Workers Static Assets) |
 | `docs/handoff/` | Handoff de design do convite da Amy |
 
@@ -89,6 +90,26 @@ Christina centraliza o conteúdo e o line-up passa de 2×2 para 4 colunas.
 **Além dos protótipos.** Foco preso no modal, `Esc`, `inert` no fundo, retorno de foco ao CTA,
 máscaras de WhatsApp e CPF, estados de enviando/sucesso/erro e `prefers-reduced-motion`.
 
+## Thumbnails de link (WhatsApp)
+
+Cada convite tem a sua, em 1200 × 630 — o formato que o WhatsApp usa no card grande de link:
+
+| Página | Thumbnail | Fonte |
+|---|---|---|
+| `/amy-edmondson` | `public/assets/og-image.png` | `tools/og-edmondson.html` |
+| `/christina-maslach` | `public/assets/og-image-maslach.png` | `tools/og-maslach.html` |
+
+São composições landscape próprias, não recortes dos pôsteres: em 9:16 o crawler cortaria a peça
+e sobraria o meio dela.
+
+```bash
+npm install      # Playwright, só para este script
+npm run og       # gera as duas
+```
+
+O script avisa e sai com código 1 se a Satoshi não tiver carregado, para não gerar PNG com a
+tipografia errada sem ninguém perceber.
+
 ## Pendências
 
 **Assets da página da Christina.** O material recebido foi um PDF achatado (três JPEGs de
@@ -96,25 +117,21 @@ máscaras de WhatsApp e CPF, estados de enviando/sucesso/erro e `prefers-reduced
 do line-up, as arenas e os avatares foram recortados dali e ficam corretos em 1×, mas sem folga
 para telas retina.
 
-- **A foto da Christina no hero é um placeholder** (`christina-maslach-PLACEHOLDER.png`): o texto
-  do convite estava queimado por cima dela, então só a faixa à direita saiu limpa e a borda
-  esquerda é dissolvida por um `mask`. Pedir o recorte original com fundo transparente, como o da
-  Amy, e trocar o arquivo.
+- **A foto da Christina é um placeholder** (`christina-maslach-PLACEHOLDER.png`), usada no hero e
+  na thumbnail: o texto do convite estava queimado por cima dela, então só a faixa à direita da
+  imagem saiu limpa e a borda esquerda é dissolvida por um `mask`. Pedir o recorte original com
+  fundo transparente, como o da Amy — trocar o arquivo corrige a página e a thumbnail de uma vez
+  (rodando `npm run og` depois).
 - Os demais recortes ganham qualidade se vierem os originais.
 
 **Fonte Satoshi.** Carregada da Fontshare. Trocar pelos `.woff2` licenciados que o Mind self-hosta
 (também remove a dependência de CDN de terceiros).
 
-**Thumbnail de link.** `public/assets/og-image.png` foi gerada sem a Satoshi (a Fontshare estava
-bloqueada no ambiente em que rodou), então saiu com a fonte de fallback. Rodar `npm run og` numa
-máquina com acesso à Fontshare e commitar. Falta também uma thumbnail própria da página da
-Christina — hoje ela reusa a da Amy.
+**Thumbnails de link.** As duas foram geradas sem a Satoshi (a Fontshare estava bloqueada no
+ambiente em que rodaram), então saíram com a fonte de fallback. Rodar `npm run og` numa máquina
+com acesso à Fontshare e commitar os PNGs.
 
 **URLs a confirmar.** "Ver programação completa" e "Por que levar meu time?" apontam para
 `https://mindsummit.company/` como palpite; confirmar os destinos certos.
-
-**Grafia do nome.** O PDF traz **Christina** Maslach (com "h"), que é a grafia correta da
-pesquisadora; a rota pedida foi `/cristina-maslach`. O texto das páginas usa "Christina" e a URL
-ficou como pedida — vale decidir se a URL acompanha.
 
 A copy em pt-BR foi aprovada pelo cliente palavra por palavra — **não reescrever**.

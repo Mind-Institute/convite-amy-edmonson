@@ -67,15 +67,17 @@
   gap: calc(var(--u) * 52);
 }
 
-/* o texto para antes da foto: sem essas larguras o lead invade o rosto */
-.tela--convite .intro__lead,
-.tela--convite .intro__title { max-width: calc(var(--u) * 620); }
+/* O texto para antes da foto — sem isso o lead invade o rosto. O título
+   pode ir mais longe que o lead porque a borda esquerda da foto é
+   dissolvida pelo mask. */
+.tela--convite .intro__title { max-width: calc(var(--u) * 780); }
+.tela--convite .intro__lead { max-width: calc(var(--u) * 600); }
 
 .hero__foto {
   position: absolute;
   right: 0;
   bottom: calc(var(--u) * 172);
-  width: calc(var(--u) * 535);
+  width: calc(var(--u) * 476);
   height: auto;
   /* O recorte do PDF corta reto à esquerda (o texto estava queimado
      por cima da foto): o mask dissolve essa borda no fundo. */

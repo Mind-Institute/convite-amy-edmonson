@@ -8,6 +8,7 @@ Duas peças de convite digital para os almoços fechados com **Amy Edmondson** (
 | `/` | Home: seleção entre os dois convites |
 | `/amy-edmondson` | Convite da Amy — pôster 1080 × 1920 (9:16) numa tela |
 | `/christina-maslach` | Convite da Christina — três telas de scroll (convite, line-up, "não é só palestra") |
+| `/admin` | Painel de confirmações (só para quem está em `public.admins`) |
 
 Publicado em `https://convite.mindsummit.company`.
 
@@ -31,6 +32,7 @@ npm start            # ou: npx serve public
 | `public/styles.css` | Design system (tokens) + canvas do pôster + modal e formulário, compartilhados |
 | `public/script.js` | Modal, máscaras, validação e envio do RSVP — compartilhado pelas duas páginas |
 | `public/assets/` | Imagens |
+| `public/admin/` | Painel de confirmações (`index.html` + `admin.js`) |
 | `public/assets/fonts/` | Satoshi variável, self-hospedada |
 | `tools/og-home.html`, `tools/og-edmondson.html`, `tools/og-maslach.html` | Fontes das thumbnails de link (1200 × 630) |
 | `tools/og-image.mjs` | Rasteriza as duas em `public/assets/og-image*.png` |
@@ -144,8 +146,12 @@ update public.integracoes set valor = 'um-segredo-qualquer'
 ```
 
 `tools/n8n-rsvp-email.json` é o fluxo pronto para importar no n8n (Webhook → confere o header
-`x-webhook-secret` → envia o e-mail). Depois de importar: trocar `TROQUE-PELO-SEGREDO`, escolher a
-credencial de SMTP no nó de e-mail, ativar, e copiar a Production URL do webhook.
+`x-webhook-secret` → envia o e-mail em HTML, com botão para o painel `/admin`). Depois de importar
+falta só escolher a credencial de SMTP no nó de e-mail e ativar.
+
+> **Atenção à URL.** `…/webhook-test/…` é a URL de teste do n8n: ela só responde enquanto alguém
+> está com o "Test workflow" aberto no editor, e só uma vez. Para valer em produção, a URL é
+> `…/webhook/…` (sem o `-test`) e o fluxo precisa estar **ativo**.
 
 O corpo que chega no webhook:
 
@@ -163,6 +169,29 @@ O corpo que chega no webhook:
 > O `pg_net` é assíncrono e não tem retentativa: se o n8n estiver fora do ar na hora, aquele
 > e-mail se perde — mas a confirmação não, ela já está gravada. O banco é a fonte de verdade; o
 > e-mail é só aviso.
+
+## Painel de confirmações (`/admin`)
+
+Login por e-mail e senha do Supabase Auth, e a lista das confirmações com filtro por convite,
+busca e exportação em CSV. Sem biblioteca: fala direto com a API REST e a de auth do Supabase.
+
+**Quem entra:** quem tiver uma linha em `public.admins`. Dar acesso a mais alguém é criar o usuário
+no Supabase Auth e inserir o UID:
+
+```sql
+insert into public.admins (user_id, nome) values ('<uid-do-usuario>', 'Nome');
+```
+
+**Como o acesso é trancado** (verificado nos três casos):
+
+| Quem | Lê `rsvps`? |
+|---|---|
+| `anon` — a chave que está no código do site | não (`permission denied`) |
+| autenticado que não está em `admins` | não (0 linhas) |
+| autenticado em `admins` | sim |
+
+A chave publicável no `admin.js` é a mesma das páginas de convite e não dá acesso a nada sozinha:
+quem libera é a RLS, e só depois de autenticar.
 
 ## Pendências
 

@@ -175,6 +175,11 @@ O corpo que chega no webhook:
 Login por e-mail e senha do Supabase Auth, e a lista das confirmações com filtro por convite,
 busca e exportação em CSV. Sem biblioteca: fala direto com a API REST e a de auth do Supabase.
 
+Tema claro, ao contrário dos convites: é ferramenta de trabalho, não peça de campanha. A
+identidade fica nos acentos (verde Focus, coral Mastery), na Satoshi e nas pílulas. O lockup do
+Summit é branco sobre transparente, então em fundo claro ele entra com `filter: invert(1)` —
+trocar por um lockup escuro oficial quando o time de marca tiver um.
+
 **Quem entra:** quem tiver uma linha em `public.admins`. Dar acesso a mais alguém é criar o usuário
 no Supabase Auth e inserir o UID:
 

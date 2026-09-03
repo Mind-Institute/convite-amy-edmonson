@@ -193,6 +193,9 @@ mobile os três viram alvos de toque de 44px+, porque mandar pelo celular é o c
 Abaixo, as confirmações com contadores por convite, filtro, busca e exportação em CSV. Sem
 biblioteca: fala direto com a API REST e a de auth do Supabase.
 
+A tabela é larga de propósito e **rola na horizontal** em vez de espremer as colunas — sombras nas
+bordas avisam que há mais conteúdo. No celular são ~1100px de rolagem; no desktop, ~300px.
+
 `/admin` continua respondendo e redireciona para `/`, porque os e-mails já enviados ao Thiago
 apontam para lá.
 

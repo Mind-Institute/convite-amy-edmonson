@@ -232,10 +232,11 @@ programação — só o convite do almoço.
 O conteúdo é gerado a partir da página original, então as duas compartilham a copy aprovada e o
 `maslach.css`. As diferenças estão só na primeira tela e no `data-convite`.
 
-> Os dois cards aparecem lado a lado na página interna, com etiquetas distintas ("Com cortesia dos
-> 2 dias do Summit" e "Para quem já tem ingresso"). Como a página agora exige login, quem escolhe
-> é quem envia — o convidado recebe só o link certo, então não há mais risco de ele entrar na
-> régua errada sozinho.
+> Na página interna os dois cards aparecem lado a lado com etiquetas dizendo **o que cada peça
+> afirma** — "A peça oferece os 2 dias do Summit" e "A peça não cita o Summit" —, não o que o
+> convidado recebe na prática. A distinção importa: quem envia precisa saber o que a pessoa vai
+> ler. O card da Amy não tem etiqueta porque a peça dela não menciona o Summit e não existe versão
+> alternativa para desambiguar.
 
 ## Pendências
 

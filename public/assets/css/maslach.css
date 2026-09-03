@@ -505,3 +505,88 @@
 
   .time__acoes { flex-direction: row; }
 }
+
+/* ============================================================
+   Revelação ao rolar — telas 2 e 3
+
+   A tela 1 já anima na entrada (styles.css). Aqui os blocos
+   aparecem conforme entram na viewport.
+
+   Tudo depende da classe que o script.js põe em <html>: sem JS,
+   nenhuma dessas regras vale e o conteúdo fica visível. É de
+   propósito — conteúdo escondido por padrão é conteúdo perdido
+   quando algo falha.
+   ============================================================ */
+
+.revela-ao-rolar .tela--lineup .secao__topo,
+.revela-ao-rolar .tela--lineup .legend,
+.revela-ao-rolar .tela--lineup .lineup__rodape,
+.revela-ao-rolar .tela--mais .secao__titulo,
+.revela-ao-rolar .tela--mais .bloco,
+.revela-ao-rolar .tela--mais .arena,
+.revela-ao-rolar .tela--mais .time {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 30));
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 0.68, 0.24, 1),
+    transform 0.7s cubic-bezier(0.22, 0.68, 0.24, 1);
+}
+
+/* Precisa da mesma profundidade das regras que escondem, acima: como
+   media query e ordem não somam especificidade, um simples
+   `.revela-ao-rolar .aparece` (0,2,0) perdia para
+   `.revela-ao-rolar .tela--lineup .legend` (0,3,0) e o bloco ficava
+   invisível para sempre. */
+.revela-ao-rolar .tela--lineup .aparece,
+.revela-ao-rolar .tela--mais .aparece {
+  opacity: 1;
+  transform: none;
+}
+
+/* Os cards do line-up e as arenas entram em cascata, não em bloco */
+.revela-ao-rolar .legend:nth-child(2) { transition-delay: 0.08s; }
+.revela-ao-rolar .legend:nth-child(3) { transition-delay: 0.16s; }
+.revela-ao-rolar .legend:nth-child(4) { transition-delay: 0.24s; }
+
+.revela-ao-rolar .arena:nth-child(2) { transition-delay: 0.09s; }
+.revela-ao-rolar .arena:nth-child(3) { transition-delay: 0.18s; }
+
+/* Interação nos cards do line-up */
+.legend {
+  transition: transform 0.22s cubic-bezier(0.22, 0.68, 0.24, 1),
+              box-shadow 0.22s cubic-bezier(0.22, 0.68, 0.24, 1);
+}
+
+.legend:hover {
+  transform: translateY(calc(var(--u) * -6));
+  box-shadow: 0 calc(var(--u) * 18) calc(var(--u) * 40) rgba(0, 0, 0, 0.35);
+}
+
+.arena {
+  transition: transform 0.22s cubic-bezier(0.22, 0.68, 0.24, 1);
+}
+
+.arena:hover { transform: translateY(calc(var(--u) * -4)); }
+
+.botao-escuro,
+.botao-linha { transition: background var(--transition), border-color var(--transition), color var(--transition), transform 0.18s cubic-bezier(0.22, 0.68, 0.24, 1); }
+
+.botao-escuro:active,
+.botao-linha:active { transform: scale(0.985); }
+
+@media (prefers-reduced-motion: reduce) {
+  .revela-ao-rolar .tela--lineup .secao__topo,
+  .revela-ao-rolar .tela--lineup .legend,
+  .revela-ao-rolar .tela--lineup .lineup__rodape,
+  .revela-ao-rolar .tela--mais .secao__titulo,
+  .revela-ao-rolar .tela--mais .bloco,
+  .revela-ao-rolar .tela--mais .arena,
+  .revela-ao-rolar .tela--mais .time {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .legend:hover,
+  .arena:hover { transform: none; box-shadow: none; }
+}

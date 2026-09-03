@@ -113,6 +113,33 @@
     }
   });
 
+  /* ---------- Revelação ao rolar ----------
+     Só liga se houver JS e IntersectionObserver, e só depois de
+     marcar o <html>: as regras de CSS que escondem os blocos
+     dependem dessa classe, então sem JS nada fica escondido.
+     Também não liga para quem pediu menos movimento. */
+
+  (function revelarAoRolar() {
+    var blocos = document.querySelectorAll(
+      '.tela--lineup .secao__topo, .tela--lineup .legend, .tela--lineup .lineup__rodape,' +
+      '.tela--mais .secao__titulo, .tela--mais .bloco, .tela--mais .arena, .tela--mais .time'
+    );
+    if (!blocos.length || !('IntersectionObserver' in window)) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    document.documentElement.classList.add('revela-ao-rolar');
+
+    var observador = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('aparece');
+        observador.unobserve(e.target);   // revela uma vez só
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
+
+    Array.prototype.forEach.call(blocos, function (b) { observador.observe(b); });
+  })();
+
   /* ---------- Máscaras ---------- */
 
   function digitos(value) {

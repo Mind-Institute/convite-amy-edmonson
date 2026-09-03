@@ -874,3 +874,113 @@ button {
 
   .partner__logo { height: calc(var(--u) * 64); }
 }
+
+/* ============================================================
+   Movimento
+
+   Só as peças de convite animam — o seletor é body[data-convite],
+   atributo que só elas têm, então nada disso vaza para o painel.
+
+   O design system pede ~0.2s nas interações, sem bounce e sem loop
+   infinito. A entrada é mais longa (0.6–0.9s) porque é uma peça que
+   se abre uma vez, mas segue a mesma curva sóbria: sobe pouco,
+   desacelera e para.
+
+   Nada aqui muda layout final: toda animação termina no estado que
+   a página já tinha.
+   ============================================================ */
+
+@keyframes entra {
+  from { opacity: 0; transform: translateY(calc(var(--u) * 26)); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Revela o título como uma cortina descendo — a primeira linha aparece
+   primeiro, que é a ordem em que se lê. Feito com clip-path para não
+   precisar quebrar o texto em elementos. */
+@keyframes revela {
+  from { opacity: 0; clip-path: inset(0 0 100% 0); transform: translateY(calc(var(--u) * 14)); }
+  to   { opacity: 1; clip-path: inset(0 0 -20% 0); transform: none; }
+}
+
+@keyframes risca {
+  from { transform: scaleX(0); }
+  to   { transform: none; }
+}
+
+@keyframes surge {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes chega-da-direita {
+  from { opacity: 0; transform: translateX(calc(var(--u) * 54)); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes acende {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+body[data-convite] {
+  --curva: cubic-bezier(0.22, 0.68, 0.24, 1);
+}
+
+/* Os glows acendem devagar, por último: são fundo, não conteúdo. */
+body[data-convite] .glow {
+  animation: acende 1.8s ease-out 0.25s both;
+}
+
+body[data-convite] .header       { animation: entra 0.7s var(--curva) 0.05s both; }
+body[data-convite] .eyebrow      { animation: entra 0.7s var(--curva) 0.16s both; }
+body[data-convite] .eyebrow__rule{ animation: risca 0.6s var(--curva) 0.34s both; transform-origin: left center; }
+body[data-convite] .eyebrow__pill{ animation: surge 0.5s var(--curva) 0.42s both; }
+body[data-convite] .intro__title { animation: revela 0.9s var(--curva) 0.24s both; }
+body[data-convite] .intro__lead  { animation: entra 0.8s var(--curva) 0.42s both; }
+
+/* Bloco da palestrante — a classe muda entre as peças, as duas entram igual */
+body[data-convite] .speaker__text,
+body[data-convite] .palestrante  { animation: entra 0.8s var(--curva) 0.54s both; }
+
+body[data-convite] .speaker__photo,
+body[data-convite] .hero__foto   { animation: chega-da-direita 1s var(--curva) 0.38s both; }
+
+body[data-convite] .details,
+body[data-convite] .quando       { animation: entra 0.8s var(--curva) 0.68s both; }
+
+body[data-convite] .partner,
+body[data-convite] .beneficios   { animation: entra 0.8s var(--curva) 0.82s both; }
+
+/* Interações: curtas, do jeito que o design system pede */
+
+body[data-convite] .cta {
+  transition: background var(--transition), transform 0.18s var(--curva);
+}
+
+body[data-convite] .cta:hover  { transform: translateY(calc(var(--u) * -2)); }
+body[data-convite] .cta:active { transform: translateY(0) scale(0.985); }
+
+/* O ponto verde entre a data e a hora pisca uma vez, junto com o bloco */
+@keyframes pulso-unico {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+
+body[data-convite] .details__bullet {
+  display: inline-block;
+  animation: pulso-unico 0.9s var(--curva) 1.15s both;
+}
+
+/* ============================================================
+   Quem pediu menos movimento recebe a peça pronta, sem animação
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-convite] *,
+  body[data-convite] *::before,
+  body[data-convite] *::after {
+    animation: none !important;
+  }
+}

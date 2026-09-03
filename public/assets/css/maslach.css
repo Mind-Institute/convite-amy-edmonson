@@ -116,9 +116,12 @@
   text-wrap: pretty;
 }
 
+/* Em cinza a 80% a linha sumia contra a bio branca logo acima. O verde
+   Focus é o acento que o eyebrow já usa para qualificar o encontro, e
+   aqui separa este qualificador da bio em vez de fundir os dois blocos. */
 .palestrante__grupo {
   margin: 0;
-  color: rgba(143, 143, 163, 0.8);
+  color: var(--green);
   font-size: calc(var(--u) * 29);
   font-weight: 900;
   line-height: 1.2;

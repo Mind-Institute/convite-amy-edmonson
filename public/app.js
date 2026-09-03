@@ -1,5 +1,5 @@
 /* ============================================================
-   Painel de confirmações — /admin
+   Convites e confirmações — página interna em /
 
    Sem biblioteca: fala direto com a API REST e a de auth do
    Supabase. A chave abaixo é a publicável, a mesma das páginas de
@@ -245,6 +245,58 @@
         o.classList.toggle('is-ativo', o === b);
       });
       render();
+    });
+  });
+
+  /* ---------- Compartilhar convite ---------- */
+
+  var avisoCopia = document.getElementById('aviso-copia');
+  var relogioAviso = null;
+
+  function piscar(texto) {
+    avisoCopia.textContent = texto;
+    avisoCopia.hidden = false;
+    clearTimeout(relogioAviso);
+    relogioAviso = setTimeout(function () { avisoCopia.hidden = true; }, 2200);
+  }
+
+  function copiar(texto) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(texto);
+    }
+    // fallback para contexto sem clipboard API
+    return new Promise(function (ok, falha) {
+      var campo = document.createElement('textarea');
+      campo.value = texto;
+      campo.setAttribute('readonly', '');
+      campo.style.position = 'fixed';
+      campo.style.opacity = '0';
+      document.body.appendChild(campo);
+      campo.select();
+      var deu = false;
+      try { deu = document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(campo);
+      deu ? ok() : falha();
+    });
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.convite'), function (card) {
+    var link = card.getAttribute('data-link');
+    var msg = card.getAttribute('data-msg');
+
+    card.addEventListener('click', function (evento) {
+      var botao = evento.target.closest('[data-acao]');
+      if (!botao) return;
+
+      if (botao.getAttribute('data-acao') === 'whatsapp') {
+        // wa.me sem número abre a lista de contatos com a mensagem pronta
+        window.open('https://wa.me/?text=' + encodeURIComponent(msg + ' ' + link), '_blank', 'noopener');
+        return;
+      }
+
+      copiar(link)
+        .then(function () { piscar('Link copiado'); })
+        .catch(function () { piscar('Não consegui copiar — o link está no card'); });
     });
   });
 

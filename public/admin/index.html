@@ -2,95 +2,15 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Confirmações — Almoços fechados · Mind Summit 2026</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#F4F3EF">
-<link rel="icon" href="../assets/simbolo-mind.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../styles.css">
-<link rel="stylesheet" href="../assets/css/admin.css">
+<!-- O painel foi para a raiz, junto com os links dos convites. Este
+     redirecionamento mantém válidos os e-mails já enviados, que
+     apontam para /admin. -->
+<meta http-equiv="refresh" content="0; url=/">
+<title>Confirmações — Mind Summit 2026</title>
 </head>
-<body class="pagina-admin">
-
-<!-- ---------- Login ---------- -->
-<main class="entrar" id="entrar">
-  <form class="entrar__card" id="form-login">
-    <img class="entrar__lockup" src="../assets/summit-lockup-horizontal.webp" alt="Mind Summit 2026" width="300" height="57">
-    <div class="entrar__titulo">
-      <h1>Confirmações</h1>
-      <p>Almoços fechados · Mind Summit 2026</p>
-    </div>
-
-    <label class="campo">
-      <span class="campo__label">E-mail</span>
-      <input class="campo__input" name="email" type="email" autocomplete="username" required placeholder="voce@joinmind.com.br">
-    </label>
-    <label class="campo">
-      <span class="campo__label">Senha</span>
-      <input class="campo__input" name="senha" type="password" autocomplete="current-password" required placeholder="••••••••">
-    </label>
-
-    <p class="entrar__erro" id="login-erro" role="alert" hidden></p>
-
-    <button class="botao-verde" type="submit" id="btn-entrar">Entrar</button>
-  </form>
-</main>
-
-<!-- ---------- Painel ---------- -->
-<main class="painel" id="painel" hidden>
-  <header class="painel__topo">
-    <div class="painel__marca">
-      <img src="../assets/summit-lockup-horizontal.webp" alt="Mind Summit 2026" width="300" height="57">
-      <h1>Confirmações</h1>
-    </div>
-    <div class="painel__conta">
-      <span id="quem"></span>
-      <button class="botao-linha-admin" type="button" id="btn-sair">Sair</button>
-    </div>
-  </header>
-
-  <section class="numeros">
-    <div class="numero"><strong id="n-total">—</strong><span>Total</span></div>
-    <div class="numero numero--verde"><strong id="n-amy">—</strong><span>Amy Edmondson · 16 set</span></div>
-    <div class="numero numero--coral"><strong id="n-christina">—</strong><span>Christina Maslach · com cortesia</span></div>
-    <div class="numero numero--neutra"><strong id="n-christina-inscritos">—</strong><span>Christina Maslach · já inscritos</span></div>
-  </section>
-
-  <div class="barra">
-    <div class="filtros" role="group" aria-label="Filtrar por convite">
-      <button class="filtro is-ativo" type="button" data-filtro="">Todos</button>
-      <button class="filtro" type="button" data-filtro="Amy Edmondson">Amy Edmondson</button>
-      <button class="filtro" type="button" data-filtro="Christina Maslach">Christina · cortesia</button>
-      <button class="filtro" type="button" data-filtro="Christina Maslach (inscritos)">Christina · inscritos</button>
-    </div>
-    <div class="barra__acoes">
-      <input class="busca" type="search" id="busca" placeholder="Buscar por nome, empresa ou e-mail">
-      <button class="botao-linha-admin" type="button" id="btn-csv">Baixar CSV</button>
-      <button class="botao-linha-admin" type="button" id="btn-recarregar">Recarregar</button>
-    </div>
-  </div>
-
-  <p class="aviso" id="aviso" role="status" hidden></p>
-
-  <div class="tabela-wrap">
-    <table class="tabela">
-      <thead>
-        <tr>
-          <th>Quando</th>
-          <th>Nome</th>
-          <th>Empresa</th>
-          <th>Cargo</th>
-          <th>E-mail</th>
-          <th>WhatsApp</th>
-          <th>CPF</th>
-          <th>Convite</th>
-        </tr>
-      </thead>
-      <tbody id="linhas"></tbody>
-    </table>
-  </div>
-</main>
-
-<script src="admin.js"></script>
+<body>
+<p>Redirecionando para <a href="/">convite.mindsummit.company</a>…</p>
+<script>location.replace('/');</script>
 </body>
 </html>

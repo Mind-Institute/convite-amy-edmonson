@@ -1,5 +1,5 @@
 /* ============================================================
-   Painel de confirmações — /admin
+   Convites e confirmações — página interna em /
 
    Tema claro: é ferramenta de trabalho, não peça de campanha.
    A identidade fica nos acentos (verde Focus, coral Mastery), na
@@ -9,7 +9,7 @@
    porque os tokens de lá são todos de fundo escuro.
    ============================================================ */
 
-.pagina-admin {
+.pagina-painel {
   --adm-fundo: #f4f3ef;         /* off-white morno, puxando o creme da marca */
   --adm-card: #ffffff;
   --adm-linha: #e6e5df;
@@ -34,7 +34,7 @@
 /* O lockup do Summit é branco sobre transparente: invertido vira
    preto, que é a versão certa para fundo claro. Trocar por um lockup
    escuro oficial quando houver. */
-.pagina-admin img[src*="summit-lockup"] { filter: invert(1); }
+.pagina-painel img[src*="summit-lockup"] { filter: invert(1); }
 
 /* ---------- Login ---------- */
 
@@ -158,13 +158,13 @@
 
 /* ---------- Painel ---------- */
 
-.painel {
+.app {
   max-width: 1220px;
   margin: 0 auto;
   padding: 26px 24px 64px;
 }
 
-.painel[hidden] { display: none; }
+.app[hidden] { display: none; }
 
 .painel__topo {
   display: flex;
@@ -359,4 +359,168 @@
   .painel { padding: 20px 14px 48px; }
   .barra__acoes { width: 100%; }
   .busca { flex: 1; min-width: 0; }
+}
+
+
+/* ============================================================
+   Seções e cards de convite
+   ============================================================ */
+
+.secao { margin-top: 34px; }
+
+.secao__cabecalho {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.secao__rotulo {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--adm-suave);
+}
+
+.secao__ajuda {
+  margin: 0;
+  color: var(--adm-fraco);
+  font-size: 13px;
+}
+
+.convites {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.convite {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--adm-linha);
+  border-radius: 16px;
+  background: var(--adm-card);
+  box-shadow: 0 1px 2px rgba(11, 11, 15, 0.03);
+}
+
+.convite__foto { width: 100%; height: 132px; object-fit: cover; object-position: 50% 16%; }
+
+.convite__info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 16px 18px 18px;
+}
+
+.convite__data {
+  margin: 0;
+  color: var(--adm-verde-escuro);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.convite__nome {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.convite__nota {
+  margin: 0;
+  padding: 4px 11px;
+  border-radius: 100px;
+  background: var(--adm-verde-fraco);
+  color: var(--adm-verde-escuro);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.convite__nota--neutra { background: #f0efe9; color: var(--adm-suave); }
+
+.convite__url {
+  margin: 4px 0 0;
+  color: var(--adm-fraco);
+  font-size: 12px;
+  word-break: break-all;
+}
+
+.convite__acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.botao-zap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border: none;
+  border-radius: 100px;
+  background: #25d366;          /* verde do WhatsApp: o botão precisa ser reconhecido */
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background var(--transition);
+}
+
+.botao-zap:hover { background: #1eb857; }
+.botao-zap svg { width: 17px; height: 17px; }
+
+/* aviso flutuante do "link copiado" */
+.aviso-copia {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  z-index: 30;
+  margin: 0;
+  padding: 11px 20px;
+  border-radius: 100px;
+  background: var(--adm-texto);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(11, 11, 15, 0.18);
+}
+
+.aviso-copia[hidden] { display: none; }
+
+@media (max-width: 640px) {
+  .app { padding: 20px 14px 48px; }
+
+  /* Alvos de toque de 44px e o "Enviar" ocupando a linha inteira —
+     mandar pelo celular é o caso de uso principal daqui. */
+  .convite__acoes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .botao-zap {
+    grid-column: 1 / -1;
+    justify-content: center;
+    padding-block: 13px;
+    font-size: 15px;
+  }
+
+  .convite__acoes .botao-linha-admin {
+    text-align: center;
+    padding-block: 13px;
+    font-size: 15px;
+  }
 }

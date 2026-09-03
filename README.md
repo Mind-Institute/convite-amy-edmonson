@@ -5,11 +5,11 @@ Duas peças de convite digital para os almoços fechados com **Amy Edmondson** (
 
 | Rota | O que é |
 |---|---|
-| `/` | Home: seleção entre os dois convites |
+| `/` | **Página interna, com login**: links dos convites (com envio por WhatsApp) e as confirmações |
 | `/amy-edmondson` | Convite da Amy — pôster 1080 × 1920 (9:16) numa tela |
 | `/christina-maslach` | Convite da Christina — três telas de scroll (convite, line-up, "não é só palestra") |
 | `/christina-maslach-inscritos` | Mesmo almoço, para quem **já tem ingresso** do Summit — só a tela do convite, sem a promessa de cortesia |
-| `/admin` | Painel de confirmações (só para quem está em `public.admins`) |
+| `/admin` | Redireciona para `/` — os e-mails já enviados apontam para cá |
 
 Publicado em `https://convite.mindsummit.company`.
 
@@ -27,14 +27,15 @@ npm start            # ou: npx serve public
 
 | Arquivo | O que é |
 |---|---|
-| `public/index.html` + `assets/css/home.css` | Home |
+| `public/index.html` + `assets/css/painel.css` | Página interna (convites + confirmações) |
 | `public/amy-edmondson/index.html` | Convite da Amy |
 | `public/christina-maslach/index.html` + `assets/css/maslach.css` | Convite da Christina |
 | `public/christina-maslach-inscritos/index.html` | Variante para quem já é inscrito (reusa o `maslach.css`) |
 | `public/styles.css` | Design system (tokens) + canvas do pôster + modal e formulário, compartilhados |
 | `public/script.js` | Modal, máscaras, validação e envio do RSVP — compartilhado pelas duas páginas |
 | `public/assets/` | Imagens |
-| `public/admin/` | Painel de confirmações (`index.html` + `admin.js`) |
+| `public/app.js` | Login, envio por WhatsApp e a tabela de confirmações |
+| `public/admin/index.html` | Só o redirecionamento para `/` |
 | `public/assets/fonts/` | Satoshi variável, self-hospedada |
 | `tools/og-home.html`, `tools/og-edmondson.html`, `tools/og-maslach.html` | Fontes das thumbnails de link (1200 × 630) |
 | `tools/og-image.mjs` | Rasteriza as duas em `public/assets/og-image*.png` |
@@ -179,10 +180,21 @@ O corpo que chega no webhook:
 > e-mail se perde — mas a confirmação não, ela já está gravada. O banco é a fonte de verdade; o
 > e-mail é só aviso.
 
-## Painel de confirmações (`/admin`)
+## Página interna (`/`)
 
-Login por e-mail e senha do Supabase Auth, e a lista das confirmações com filtro por convite,
-busca e exportação em CSV. Sem biblioteca: fala direto com a API REST e a de auth do Supabase.
+Tudo o que é interno mora atrás de um login só, na raiz: **os links dos convites**, para enviar aos
+CHROs, e **as confirmações** recebidas. Os convidados nunca chegam aqui — eles recebem o link
+direto da peça.
+
+Cada card de convite tem **Enviar** (abre o WhatsApp com a mensagem e o link prontos, via
+`wa.me/?text=`, que no celular cai direto na lista de contatos), **Copiar link** e **Abrir**. No
+mobile os três viram alvos de toque de 44px+, porque mandar pelo celular é o caso de uso principal.
+
+Abaixo, as confirmações com contadores por convite, filtro, busca e exportação em CSV. Sem
+biblioteca: fala direto com a API REST e a de auth do Supabase.
+
+`/admin` continua respondendo e redireciona para `/`, porque os e-mails já enviados ao Thiago
+apontam para lá.
 
 Tema claro, ao contrário dos convites: é ferramenta de trabalho, não peça de campanha. A
 identidade fica nos acentos (verde Focus, coral Mastery), na Satoshi e nas pílulas. O lockup do
@@ -217,11 +229,10 @@ programação — só o convite do almoço.
 O conteúdo é gerado a partir da página original, então as duas compartilham a copy aprovada e o
 `maslach.css`. As diferenças estão só na primeira tela e no `data-convite`.
 
-> Os dois cards aparecem na home com etiquetas distintas ("Com cortesia dos 2 dias do Summit" e
-> "Para quem já tem ingresso do Summit"). Como os convites são enviados por link direto, quem cair
-> na home e escolher o card errado entra na régua errada — se preferir, dá para tirar a variante
-> da home e deixá-la só como link, removendo o terceiro `<a class="convite">` de
-> `public/index.html`.
+> Os dois cards aparecem lado a lado na página interna, com etiquetas distintas ("Com cortesia dos
+> 2 dias do Summit" e "Para quem já tem ingresso"). Como a página agora exige login, quem escolhe
+> é quem envia — o convidado recebe só o link certo, então não há mais risco de ele entrar na
+> régua errada sozinho.
 
 ## Pendências
 

@@ -2,93 +2,174 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Almoços fechados — Mind Summit 2026</title>
-<meta name="description" content="Os almoços fechados do Mind Summit 2026: encontros reservados a um grupo restrito de CHROs com Amy Edmondson e Christina Maslach.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Convites e confirmações — Mind Summit 2026</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#0B0B0F">
-<meta property="og:type" content="website">
-<meta property="og:locale" content="pt_BR">
-<meta property="og:site_name" content="Mind Summit 2026">
-<meta property="og:title" content="Almoços fechados — Mind Summit 2026">
-<meta property="og:description" content="Encontros reservados a um grupo restrito de CHROs com Amy Edmondson e Christina Maslach.">
-<meta property="og:url" content="https://convite.mindsummit.company/">
-<meta property="og:image" content="https://convite.mindsummit.company/assets/og-image-home.png">
-<meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Almoços fechados do Mind Summit 2026 com Amy Edmondson e Christina Maslach">
-<meta name="twitter:image" content="https://convite.mindsummit.company/assets/og-image-home.png">
-<meta name="twitter:card" content="summary_large_image">
-
+<meta name="theme-color" content="#F4F3EF">
 <link rel="icon" href="assets/simbolo-mind.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="assets/css/home.css">
+<link rel="stylesheet" href="assets/css/painel.css">
 </head>
-<body class="pagina-home">
+<!--
+  Página interna: exige login. Reúne os links dos convites (para enviar
+  aos CHROs) e as confirmações recebidas. Os convidados nunca chegam
+  aqui — eles recebem o link direto da peça.
+-->
+<body class="pagina-painel">
 
-<main class="home">
-  <div class="glow glow--green" aria-hidden="true"></div>
-  <div class="glow glow--purple" aria-hidden="true"></div>
-
-  <div class="home__conteudo">
-    <header class="header">
-      <img class="header__lockup" src="assets/summit-lockup.png" alt="Mind Summit 2026" width="1200" height="794">
-      <p class="header__seal"><span class="header__seal-mark" aria-hidden="true"></span>Convite pessoal · Não transferível</p>
-    </header>
-
-    <div class="home__corpo">
-      <section class="intro">
-        <div class="eyebrow">
-          <span class="eyebrow__rule" aria-hidden="true"></span>
-          <span class="eyebrow__label">Almoços fechados</span>
-          <span class="eyebrow__pill">16 + 17 de setembro</span>
-        </div>
-        <h1 class="intro__title">Um lugar à mesa.</h1>
-        <p class="intro__lead">Encontros reservados a um grupo restrito de CHROs, durante o Mind Summit 2026. Abra o convite que você recebeu para confirmar sua presença.</p>
-      </section>
-
-      <nav class="convites" aria-label="Convites">
-        <a class="convite" href="amy-edmondson">
-          <img class="convite__foto" src="assets/lineup-edmondson.png" alt="" width="461" height="297">
-          <div class="convite__info">
-            <p class="convite__data">16 set · 13h30</p>
-            <h2 class="convite__nome">Amy Edmondson</h2>
-            <p class="convite__nota">Com cortesia dos 2 dias do Summit</p>
-            <p class="convite__tema">Uma conversa exclusiva entre líderes sobre risco, erro e organizações que aprendem.</p>
-            <p class="convite__acao">Ver convite <span aria-hidden="true">→</span></p>
-          </div>
-        </a>
-
-        <a class="convite" href="christina-maslach">
-          <img class="convite__foto" src="assets/lineup-maslach.png" alt="" width="461" height="297">
-          <div class="convite__info">
-            <p class="convite__data">17 set · 13h30</p>
-            <h2 class="convite__nome">Christina Maslach</h2>
-            <p class="convite__nota">Com cortesia dos 2 dias do Summit</p>
-            <p class="convite__tema">Uma conversa franca entre líderes que tomam decisões sobre pessoas e organizações.</p>
-            <p class="convite__acao">Ver convite <span aria-hidden="true">→</span></p>
-          </div>
-        </a>
-
-        <a class="convite" href="christina-maslach-inscritos">
-          <img class="convite__foto" src="assets/lineup-maslach.png" alt="" width="461" height="297">
-          <div class="convite__info">
-            <p class="convite__data">17 set · 13h30</p>
-            <h2 class="convite__nome">Christina Maslach</h2>
-            <p class="convite__nota convite__nota--neutra">Para quem já tem ingresso do Summit</p>
-            <p class="convite__tema">Uma conversa franca entre líderes que tomam decisões sobre pessoas e organizações.</p>
-            <p class="convite__acao">Ver convite <span aria-hidden="true">→</span></p>
-          </div>
-        </a>
-      </nav>
-
-      <footer class="home__rodape">
-        <p>São Paulo Expo · durante o Mind Summit 2026</p>
-      </footer>
+<!-- ---------- Login ---------- -->
+<main class="entrar" id="entrar">
+  <form class="entrar__card" id="form-login">
+    <img class="entrar__lockup" src="assets/summit-lockup-horizontal.webp" alt="Mind Summit 2026" width="300" height="57">
+    <div class="entrar__titulo">
+      <h1>Convites</h1>
+      <p>Almoços fechados · Mind Summit 2026</p>
     </div>
-  </div>
+
+    <label class="campo">
+      <span class="campo__label">E-mail</span>
+      <input class="campo__input" name="email" type="email" autocomplete="username" required placeholder="voce@joinmind.com.br">
+    </label>
+    <label class="campo">
+      <span class="campo__label">Senha</span>
+      <input class="campo__input" name="senha" type="password" autocomplete="current-password" required placeholder="••••••••">
+    </label>
+
+    <p class="entrar__erro" id="login-erro" role="alert" hidden></p>
+    <button class="botao-verde" type="submit" id="btn-entrar">Entrar</button>
+  </form>
 </main>
 
+<!-- ---------- Aplicação ---------- -->
+<main class="app" id="painel" hidden>
+
+  <header class="painel__topo">
+    <div class="painel__marca">
+      <img src="assets/summit-lockup-horizontal.webp" alt="Mind Summit 2026" width="300" height="57">
+      <h1>Convites</h1>
+    </div>
+    <div class="painel__conta">
+      <span id="quem"></span>
+      <button class="botao-linha-admin" type="button" id="btn-sair">Sair</button>
+    </div>
+  </header>
+
+  <!-- Links para enviar -->
+  <section class="secao">
+    <div class="secao__cabecalho">
+      <h2 class="secao__rotulo">Enviar convite</h2>
+      <p class="secao__ajuda">Cada peça tem seu link. O compartilhamento abre o WhatsApp com a mensagem pronta.</p>
+    </div>
+
+    <div class="convites">
+      <article class="convite"
+               data-link="https://convite.mindsummit.company/amy-edmondson"
+               data-msg="Convite para o almoço fechado com Amy Edmondson — 16 de setembro, 13h30, São Paulo Expo, durante o Mind Summit 2026. Confirme sua presença aqui:">
+        <img class="convite__foto" src="assets/lineup-edmondson.png" alt="" width="461" height="297">
+        <div class="convite__info">
+          <p class="convite__data">16 set · 13h30</p>
+          <h3 class="convite__nome">Amy Edmondson</h3>
+          <p class="convite__nota">Com cortesia dos 2 dias do Summit</p>
+          <p class="convite__url">convite.mindsummit.company/amy-edmondson</p>
+          <div class="convite__acoes">
+            <button class="botao-zap" type="button" data-acao="whatsapp">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.53.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.44.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.47c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07s.89 2.4 1.01 2.56c.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.11-.22-.17-.47-.29z"></path></svg>
+              Enviar
+            </button>
+            <button class="botao-linha-admin" type="button" data-acao="copiar">Copiar link</button>
+            <a class="botao-linha-admin" href="amy-edmondson" target="_blank" rel="noopener">Abrir</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="convite"
+               data-link="https://convite.mindsummit.company/christina-maslach"
+               data-msg="Convite para o almoço fechado com Christina Maslach — 17 de setembro, 13h30, São Paulo Expo, durante o Mind Summit 2026. Confirme sua presença aqui:">
+        <img class="convite__foto" src="assets/lineup-maslach.png" alt="" width="461" height="297">
+        <div class="convite__info">
+          <p class="convite__data">17 set · 13h30</p>
+          <h3 class="convite__nome">Christina Maslach</h3>
+          <p class="convite__nota">Com cortesia dos 2 dias do Summit</p>
+          <p class="convite__url">convite.mindsummit.company/christina-maslach</p>
+          <div class="convite__acoes">
+            <button class="botao-zap" type="button" data-acao="whatsapp">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.53.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.44.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.47c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07s.89 2.4 1.01 2.56c.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.11-.22-.17-.47-.29z"></path></svg>
+              Enviar
+            </button>
+            <button class="botao-linha-admin" type="button" data-acao="copiar">Copiar link</button>
+            <a class="botao-linha-admin" href="christina-maslach" target="_blank" rel="noopener">Abrir</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="convite"
+               data-link="https://convite.mindsummit.company/christina-maslach-inscritos"
+               data-msg="Convite para o almoço fechado com Christina Maslach — 17 de setembro, 13h30, São Paulo Expo, durante o Mind Summit 2026. Confirme sua presença aqui:">
+        <img class="convite__foto" src="assets/lineup-maslach.png" alt="" width="461" height="297">
+        <div class="convite__info">
+          <p class="convite__data">17 set · 13h30</p>
+          <h3 class="convite__nome">Christina Maslach</h3>
+          <p class="convite__nota convite__nota--neutra">Para quem já tem ingresso</p>
+          <p class="convite__url">convite.mindsummit.company/christina-maslach-inscritos</p>
+          <div class="convite__acoes">
+            <button class="botao-zap" type="button" data-acao="whatsapp">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.53.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.44.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.47c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07s.89 2.4 1.01 2.56c.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.11-.22-.17-.47-.29z"></path></svg>
+              Enviar
+            </button>
+            <button class="botao-linha-admin" type="button" data-acao="copiar">Copiar link</button>
+            <a class="botao-linha-admin" href="christina-maslach-inscritos" target="_blank" rel="noopener">Abrir</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Confirmações -->
+  <section class="secao">
+    <div class="secao__cabecalho">
+      <h2 class="secao__rotulo">Confirmações</h2>
+    </div>
+
+    <div class="numeros">
+      <div class="numero"><strong id="n-total">—</strong><span>Total</span></div>
+      <div class="numero numero--verde"><strong id="n-amy">—</strong><span>Amy Edmondson · 16 set</span></div>
+      <div class="numero numero--coral"><strong id="n-christina">—</strong><span>Christina Maslach · com cortesia</span></div>
+      <div class="numero numero--neutra"><strong id="n-christina-inscritos">—</strong><span>Christina Maslach · já inscritos</span></div>
+    </div>
+
+    <div class="barra">
+      <div class="filtros" role="group" aria-label="Filtrar por convite">
+        <button class="filtro is-ativo" type="button" data-filtro="">Todos</button>
+        <button class="filtro" type="button" data-filtro="Amy Edmondson">Amy Edmondson</button>
+        <button class="filtro" type="button" data-filtro="Christina Maslach">Christina · cortesia</button>
+        <button class="filtro" type="button" data-filtro="Christina Maslach (inscritos)">Christina · inscritos</button>
+      </div>
+      <div class="barra__acoes">
+        <input class="busca" type="search" id="busca" placeholder="Buscar por nome, empresa ou e-mail">
+        <button class="botao-linha-admin" type="button" id="btn-csv">Baixar CSV</button>
+        <button class="botao-linha-admin" type="button" id="btn-recarregar">Recarregar</button>
+      </div>
+    </div>
+
+    <p class="aviso" id="aviso" role="status" hidden></p>
+
+    <div class="tabela-wrap">
+      <table class="tabela">
+        <thead>
+          <tr>
+            <th>Quando</th><th>Nome</th><th>Empresa</th><th>Cargo</th>
+            <th>E-mail</th><th>WhatsApp</th><th>CPF</th><th>Convite</th>
+          </tr>
+        </thead>
+        <tbody id="linhas"></tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<p class="aviso-copia" id="aviso-copia" role="status" hidden></p>
+
+<script src="app.js"></script>
 </body>
 </html>

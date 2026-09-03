@@ -220,6 +220,7 @@
 
 .numero--verde { border-left: 4px solid var(--adm-verde); }
 .numero--coral { border-left: 4px solid var(--adm-coral); }
+.numero--neutra { border-left: 4px solid #c9c8c0; }
 
 /* Barra de filtros */
 
@@ -352,6 +353,7 @@
 
 .tag--verde { background: var(--adm-verde-fraco); color: var(--adm-verde-escuro); }
 .tag--coral { background: var(--adm-coral-fraco); color: var(--adm-coral-escuro); }
+.tag--neutra { background: #f0efe9; color: var(--adm-suave); }
 
 @media (max-width: 640px) {
   .painel { padding: 20px 14px 48px; }

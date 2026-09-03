@@ -8,6 +8,7 @@ Duas peças de convite digital para os almoços fechados com **Amy Edmondson** (
 | `/` | Home: seleção entre os dois convites |
 | `/amy-edmondson` | Convite da Amy — pôster 1080 × 1920 (9:16) numa tela |
 | `/christina-maslach` | Convite da Christina — três telas de scroll (convite, line-up, "não é só palestra") |
+| `/christina-maslach-inscritos` | Mesmo almoço, para quem **já tem ingresso** do Summit — só a tela do convite, sem a promessa de cortesia |
 | `/admin` | Painel de confirmações (só para quem está em `public.admins`) |
 
 Publicado em `https://convite.mindsummit.company`.
@@ -29,6 +30,7 @@ npm start            # ou: npx serve public
 | `public/index.html` + `assets/css/home.css` | Home |
 | `public/amy-edmondson/index.html` | Convite da Amy |
 | `public/christina-maslach/index.html` + `assets/css/maslach.css` | Convite da Christina |
+| `public/christina-maslach-inscritos/index.html` | Variante para quem já é inscrito (reusa o `maslach.css`) |
 | `public/styles.css` | Design system (tokens) + canvas do pôster + modal e formulário, compartilhados |
 | `public/script.js` | Modal, máscaras, validação e envio do RSVP — compartilhado pelas duas páginas |
 | `public/assets/` | Imagens |
@@ -45,7 +47,14 @@ npm start            # ou: npx serve public
 Vão para a tabela `rsvps` do Supabase (projeto `qokdydgdovswjalpummr`), com as colunas
 `nome`, `sobrenome`, `empresa`, `cargo`, `email`, `whatsapp`, `cpf` e `convite` —
 `convite` é preenchido pela própria página (`data-convite` no `<body>`), então dá para separar
-quem confirmou em qual almoço.
+quem confirmou em qual almoço. São três valores, e a diferença entre os dois últimos é
+operacional:
+
+| `convite` | Página | O que muda |
+|---|---|---|
+| `Amy Edmondson` | `/amy-edmondson` | recebe cortesia dos 2 dias do Summit |
+| `Christina Maslach` | `/christina-maslach` | recebe cortesia dos 2 dias do Summit |
+| `Christina Maslach (inscritos)` | `/christina-maslach-inscritos` | **já comprou o ingresso** — só o almoço |
 
 **A chave no `script.js` é a publicável (anon), e ela é feita para ficar exposta no navegador.**
 A proteção não é a chave: é o RLS. `anon` tem só o privilégio de `INSERT` — nem `SELECT`, nem
@@ -197,6 +206,22 @@ insert into public.admins (user_id, nome) values ('<uid-do-usuario>', 'Nome');
 
 A chave publicável no `admin.js` é a mesma das páginas de convite e não dá acesso a nada sozinha:
 quem libera é a RLS, e só depois de autenticar.
+
+## Duas versões do convite da Christina
+
+Parte dos CHROs convidados já comprou ingresso do Summit. Para eles, ler "seu convite inclui
+acesso aos 2 dias" soa como estar pagando de novo por algo que já têm, então existe uma segunda
+versão da peça em `/christina-maslach-inscritos`, sem essa promessa e sem as telas de line-up e
+programação — só o convite do almoço.
+
+O conteúdo é gerado a partir da página original, então as duas compartilham a copy aprovada e o
+`maslach.css`. As diferenças estão só na primeira tela e no `data-convite`.
+
+> Os dois cards aparecem na home com etiquetas distintas ("Com cortesia dos 2 dias do Summit" e
+> "Para quem já tem ingresso do Summit"). Como os convites são enviados por link direto, quem cair
+> na home e escolher o card errado entra na régua errada — se preferir, dá para tirar a variante
+> da home e deixá-la só como link, removendo o terceiro `<a class="convite">` de
+> `public/index.html`.
 
 ## Pendências
 

@@ -136,6 +136,8 @@
       dados.filter(function (r) { return r.convite === 'Amy Edmondson'; }).length;
     document.getElementById('n-christina').textContent =
       dados.filter(function (r) { return r.convite === 'Christina Maslach'; }).length;
+    document.getElementById('n-christina-inscritos').textContent =
+      dados.filter(function (r) { return r.convite === 'Christina Maslach (inscritos)'; }).length;
 
     if (!lista.length) {
       linhas.innerHTML = '<tr><td colspan="8" class="vazio">' +
@@ -144,7 +146,8 @@
     }
 
     linhas.innerHTML = lista.map(function (r) {
-      var marca = r.convite === 'Amy Edmondson' ? 'verde' : 'coral';
+      var marca = r.convite === 'Amy Edmondson' ? 'verde'
+                : r.convite === 'Christina Maslach' ? 'coral' : 'neutra';
       return '<tr>' +
         '<td class="col-quando">' + esc(quandoLegivel(r.criado_em)) + '</td>' +
         '<td><b>' + esc(r.nome + ' ' + r.sobrenome) + '</b></td>' +

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Há um lugar reservado para você nesta mesa — Almoço com Christina Maslach · Mind Summit 2026</title>
+<meta name="description" content="Convite pessoal para o almoço fechado com Christina Maslach em 17 de setembro, 13h30, durante o Mind Summit 2026. Uma conversa franca entre líderes que tomam decisões sobre pessoas e organizações.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0B0B0F">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Mind Summit 2026">
+<meta property="og:title" content="Há um lugar reservado para você nesta mesa">
+<meta property="og:description" content="Almoço fechado com Christina Maslach — 17 de setembro, 13h30 · São Paulo Expo. Uma conversa franca entre líderes que tomam decisões sobre pessoas e organizações.">
+<meta property="og:url" content="https://convite.mindsummit.company/christina-maslach-inscritos">
+<meta property="og:image" content="https://convite.mindsummit.company/assets/og-image-maslach.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://convite.mindsummit.company/assets/og-image-maslach.png">
+
+<link rel="icon" href="../assets/simbolo-mind.svg" type="image/svg+xml">
+
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../assets/css/maslach.css">
+</head>
+<!-- ============================================================
+     Versao do convite da Christina para quem JA TEM ingresso do
+     Summit. Diferencas em relacao a /christina-maslach:
+       - so a tela do convite (sem line-up e sem "nao e so palestra")
+       - sem o card "seu convite inclui ... acesso aos 2 dias", que
+         para este publico soa como algo que a pessoa ja comprou
+       - grava convite = "Christina Maslach (inscritos)"
+     ============================================================ -->
+<body class="pagina-maslach" data-convite="Christina Maslach (inscritos)">
+
+<main id="stage">
+
+<!-- ============================================================
+     Tela 1 — Convite
+     ============================================================ -->
+<section class="tela tela--convite">
+  <div class="glow glow--green" aria-hidden="true"></div>
+  <div class="glow glow--purple" aria-hidden="true"></div>
+
+  <img class="hero__foto" src="../assets/christina-maslach.webp" alt="Christina Maslach" width="900" height="1126">
+
+  <div class="tela__conteudo">
+    <header class="header">
+      <img class="header__lockup" src="../assets/summit-lockup-horizontal.webp" alt="Mind Summit 2026" width="300" height="57">
+      <p class="header__seal"><span class="header__seal-mark" aria-hidden="true"></span>Convite pessoal · Não transferível</p>
+    </header>
+
+    <div class="tela__corpo">
+      <section class="intro">
+        <div class="eyebrow">
+          <span class="eyebrow__rule" aria-hidden="true"></span>
+          <span class="eyebrow__label">Almoço fechado</span>
+          <span class="eyebrow__pill">17 de setembro</span>
+        </div>
+        <h1 class="intro__title">Há um lugar reservado para você nesta mesa.</h1>
+        <p class="intro__lead">Uma conversa franca com Christina Maslach entre líderes que tomam decisões sobre pessoas e organizações.</p>
+      </section>
+
+      <section class="palestrante">
+        <h2 class="palestrante__nome">Christina<br>Maslach.</h2>
+        <p class="palestrante__bio">Pioneira e principal referência mundial na ciência do burnout</p>
+        <p class="palestrante__grupo">Um grupo restrito de CHROs.</p>
+      </section>
+
+      <section class="quando">
+        <p class="details__when">
+          <span>17 SET</span><span class="details__bullet" aria-hidden="true">•</span><span>13H30</span>
+        </p>
+        <p class="quando__local">São Paulo Expo · durante o Mind Summit 2026</p>
+        <button class="cta" type="button" id="abrir-form" aria-haspopup="dialog">
+          <span>Confirmar meu lugar</span><span aria-hidden="true">→</span>
+        </button>
+      </section>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- Modal de confirmação (mesma estrutura da página da Amy) -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-titulo" hidden>
+  <div class="modal__card" id="modal-card">
+
+    <div class="modal__header">
+      <div class="modal__heading">
+        <span class="modal__eyebrow">Almoço fechado · 17 set · 13h30</span>
+        <h2 class="modal__title" id="modal-titulo">Confirmar meu lugar</h2>
+      </div>
+      <button class="modal__close" type="button" id="fechar-form" aria-label="Fechar">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+
+    <form class="form" id="form-rsvp" novalidate>
+      <div class="form__grid">
+        <label class="field">
+          <span class="field__label">Nome<span class="field__required" aria-hidden="true">*</span></span>
+          <input class="field__input" name="nome" type="text" autocomplete="given-name" required placeholder="Seu nome">
+        </label>
+        <label class="field">
+          <span class="field__label">Sobrenome<span class="field__required" aria-hidden="true">*</span></span>
+          <input class="field__input" name="sobrenome" type="text" autocomplete="family-name" required placeholder="Seu sobrenome">
+        </label>
+        <label class="field">
+          <span class="field__label">Empresa<span class="field__required" aria-hidden="true">*</span></span>
+          <input class="field__input" name="empresa" type="text" autocomplete="organization" required placeholder="Nome da empresa">
+        </label>
+        <label class="field">
+          <span class="field__label">Cargo<span class="field__required" aria-hidden="true">*</span></span>
+          <input class="field__input" name="cargo" type="text" autocomplete="organization-title" required placeholder="Seu cargo">
+        </label>
+        <label class="field">
+          <span class="field__label">E-mail<span class="field__required" aria-hidden="true">*</span></span>
+          <input class="field__input" name="email" type="email" autocomplete="email" required placeholder="nome@empresa.com">
+        </label>
+        <label class="field">
+          <span class="field__label">WhatsApp<span class="field__required" aria-hidden="true">*</span></span>
+          <input class="field__input" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="(11) 99999-9999" maxlength="15" data-mask="telefone">
+        </label>
+        <label class="field field--largo">
+          <span class="field__label">CPF<span class="field__required" aria-hidden="true">*</span></span>
+          <input class="field__input" name="cpf" type="text" inputmode="numeric" required placeholder="000.000.000-00" maxlength="14" data-mask="cpf">
+        </label>
+      </div>
+
+      <p class="form__error" id="form-erro" role="alert" hidden></p>
+
+      <div class="form__footer">
+        <p class="form__note"><span class="field__required" aria-hidden="true">*</span> Todos os campos são obrigatórios.</p>
+        <button class="submit" type="submit" id="enviar-form">
+          <span class="submit__label">Enviar confirmação</span><span class="submit__arrow" aria-hidden="true">→</span>
+        </button>
+      </div>
+    </form>
+
+    <div class="success" id="sucesso" hidden
+         data-mensagem="Obrigado. Guardamos seu lugar no almoço com Christina Maslach — 17/09, 13h30, São Paulo Expo.">
+      <svg class="success__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M20 6 9 17l-5-5"></path>
+      </svg>
+      <h3 class="success__title" id="sucesso-titulo">Presença confirmada</h3>
+      <p class="success__text" id="sucesso-texto"></p>
+      <button class="success__close" type="button" data-fechar>Fechar</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="../script.js"></script>
+</body>
+</html>

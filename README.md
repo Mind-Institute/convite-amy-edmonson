@@ -46,7 +46,8 @@ npm start            # ou: npx serve public
 ## Confirmações de presença (RSVP)
 
 Vão para a tabela `rsvps` do Supabase (projeto `qokdydgdovswjalpummr`), com as colunas
-`nome`, `sobrenome`, `empresa`, `cargo`, `email`, `whatsapp`, `cpf` e `convite` —
+`nome`, `sobrenome`, `empresa`, `cargo`, `email`, `whatsapp`, `cpf`, `convite` e
+`ingresso_enviado` —
 `convite` é preenchido pela própria página (`data-convite` no `<body>`), então dá para separar
 quem confirmou em qual almoço. São três valores, e a diferença entre os dois últimos é
 operacional:
@@ -56,6 +57,12 @@ operacional:
 | `Amy Edmondson` | `/amy-edmondson` | recebe cortesia dos 2 dias do Summit |
 | `Christina Maslach` | `/christina-maslach` | recebe cortesia dos 2 dias do Summit |
 | `Christina Maslach (inscritos)` | `/christina-maslach-inscritos` | **já comprou o ingresso** — só o almoço |
+
+`ingresso_enviado` controla se a cortesia do Summit já foi mandada: `Não` (padrão), `Sim` ou
+`Não se aplica`. Só o painel escreve nela, e o grant é **por coluna** — quem está em `admins`
+altera esse campo e nenhum outro, então nem com sessão válida se edita nome, e-mail ou CPF de um
+convidado. A chave pública (`anon`) também passou a inserir só as colunas do formulário, de modo
+que ninguém consegue forjar `ingresso_enviado` pelo site.
 
 **A chave no `script.js` é a publicável (anon), e ela é feita para ficar exposta no navegador.**
 A proteção não é a chave: é o RLS. `anon` tem só o privilégio de `INSERT` — nem `SELECT`, nem

@@ -533,3 +533,49 @@
     font-size: 15px;
   }
 }
+
+/* ============================================================
+   Ingresso enviado — última coluna da tabela
+   ============================================================ */
+
+.ingresso {
+  padding: 6px 28px 6px 12px;
+  border: 1px solid var(--adm-linha);
+  border-radius: 100px;
+  background-color: var(--adm-card);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5l5-5' fill='none' stroke='%236b6b78' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+  background-size: 10px;
+  color: var(--adm-texto);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+  transition: border-color var(--transition), background-color var(--transition), color var(--transition);
+}
+
+.ingresso:focus-visible {
+  border-color: var(--adm-verde-escuro);
+  box-shadow: 0 0 0 3px rgba(14, 122, 68, 0.12);
+}
+
+.ingresso[disabled] { opacity: 0.5; cursor: progress; }
+
+/* O estado se lê pela cor, sem precisar abrir o menu */
+.ingresso--sim {
+  border-color: rgba(14, 122, 68, 0.35);
+  background-color: var(--adm-verde-fraco);
+  color: var(--adm-verde-escuro);
+}
+
+.ingresso--nao {
+  border-color: rgba(184, 66, 44, 0.3);
+  background-color: var(--adm-coral-fraco);
+  color: var(--adm-coral-escuro);
+}
+
+.ingresso--na { color: var(--adm-suave); }

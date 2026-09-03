@@ -148,7 +148,7 @@
     linhas.innerHTML = lista.map(function (r) {
       var marca = r.convite === 'Amy Edmondson' ? 'verde'
                 : r.convite === 'Christina Maslach' ? 'coral' : 'neutra';
-      return '<tr>' +
+      return '<tr data-id="' + esc(r.id) + '">' +
         '<td class="col-quando">' + esc(quandoLegivel(r.criado_em)) + '</td>' +
         '<td><b>' + esc(r.nome + ' ' + r.sobrenome) + '</b></td>' +
         '<td>' + esc(r.empresa) + '</td>' +
@@ -157,8 +157,20 @@
         '<td class="col-nowrap"><a href="https://wa.me/55' + esc((r.whatsapp || '').replace(/\D/g, '')) + '">' + esc(r.whatsapp) + '</a></td>' +
         '<td class="col-nowrap">' + esc(cpfLegivel(r.cpf)) + '</td>' +
         '<td><span class="tag tag--' + marca + '">' + esc(r.convite) + '</span></td>' +
+        '<td>' + selectIngresso(r.ingresso_enviado) + '</td>' +
       '</tr>';
     }).join('');
+  }
+
+  var OPCOES_INGRESSO = ['Não', 'Sim', 'Não se aplica'];
+
+  function selectIngresso(atual) {
+    var v = OPCOES_INGRESSO.indexOf(atual) === -1 ? 'Não' : atual;
+    return '<select class="ingresso ingresso--' + (v === 'Sim' ? 'sim' : v === 'Não' ? 'nao' : 'na') +
+      '" data-anterior="' + esc(v) + '">' +
+      OPCOES_INGRESSO.map(function (o) {
+        return '<option value="' + esc(o) + '"' + (o === v ? ' selected' : '') + '>' + esc(o) + '</option>';
+      }).join('') + '</select>';
   }
 
   function esc(v) {
@@ -172,7 +184,7 @@
   function baixarCsv() {
     var lista = visiveis();
     if (!lista.length) return;
-    var col = ['criado_em', 'convite', 'nome', 'sobrenome', 'empresa', 'cargo', 'email', 'whatsapp', 'cpf'];
+    var col = ['criado_em', 'convite', 'nome', 'sobrenome', 'empresa', 'cargo', 'email', 'whatsapp', 'cpf', 'ingresso_enviado'];
     var linhasCsv = [col.join(';')].concat(lista.map(function (r) {
       return col.map(function (c) {
         var v = r[c] == null ? '' : String(r[c]);
@@ -246,6 +258,49 @@
       });
       render();
     });
+  });
+
+  /* ---------- Marcar o envio do ingresso ----------
+     PATCH numa coluna só: o banco dá a quem está em admins permissão de
+     UPDATE apenas em ingresso_enviado, então nem por aqui nem por fora
+     dá para editar os dados do convidado. */
+
+  linhas.addEventListener('change', function (evento) {
+    var campo = evento.target;
+    if (!campo.classList || !campo.classList.contains('ingresso')) return;
+
+    var linha = campo.closest('tr');
+    var id = linha && linha.getAttribute('data-id');
+    if (!id) return;
+
+    var novoValor = campo.value;
+    var anterior = campo.getAttribute('data-anterior') || 'Não';
+    campo.disabled = true;
+
+    fetch(SUPABASE_URL + '/rest/v1/rsvps?id=eq.' + encodeURIComponent(id), {
+      method: 'PATCH',
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: 'Bearer ' + sessao.access_token,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal'
+      },
+      body: JSON.stringify({ ingresso_enviado: novoValor })
+    })
+      .then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        campo.setAttribute('data-anterior', novoValor);
+        campo.className = 'ingresso ingresso--' +
+          (novoValor === 'Sim' ? 'sim' : novoValor === 'Não' ? 'nao' : 'na');
+        // mantém o dado em memória, para o filtro e o CSV não desatualizarem
+        dados.forEach(function (d) { if (d.id === id) d.ingresso_enviado = novoValor; });
+        piscar('Ingresso: ' + novoValor);
+      })
+      .catch(function () {
+        campo.value = anterior;   // não fingir que salvou
+        piscar('Não consegui salvar. Tente de novo.');
+      })
+      .then(function () { campo.disabled = false; });
   });
 
   /* ---------- Compartilhar convite ---------- */

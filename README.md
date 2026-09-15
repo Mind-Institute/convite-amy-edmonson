@@ -6,12 +6,49 @@ Duas peças de convite digital para os almoços fechados com **Amy Edmondson** (
 | Rota | O que é |
 |---|---|
 | `/` | **Página interna, com login**: links dos convites (com envio por WhatsApp) e as confirmações |
-| `/amy-edmondson` | Convite da Amy — pôster 1080 × 1920 (9:16) numa tela |
-| `/christina-maslach` | Convite da Christina — três telas de scroll (convite, line-up, "não é só palestra") |
-| `/christina-maslach-inscritos` | Mesmo almoço, para quem **já tem ingresso** do Summit — só a tela do convite, sem a promessa de cortesia |
+| `/amy-edmondson` | ⏸ **Convite esgotado** (o convite está em `pausado/`) |
+| `/christina-maslach` | ⏸ **Convite esgotado** (o convite está em `pausado/`) |
+| `/christina-maslach-inscritos` | ⏸ **Convite esgotado** (o convite está em `pausado/`) |
 | `/admin` | Redireciona para `/` — os e-mails já enviados apontam para cá |
 
 Publicado em `https://convite.mindsummit.company`.
+
+## ⏸ Convites suspensos
+
+As vagas dos dois almoços foram encerradas. As três rotas de convite servem hoje uma
+tela única com **"Convite esgotado"** — sem formulário, sem script e sem nenhuma
+chamada ao banco.
+
+Os convites de verdade **não foram apagados**: estão em `pausado/`, que fica fora de
+`public/` e portanto fora do deploy.
+
+**Para reabrir**, é desfazer a troca — os convites voltam exatamente como estavam:
+
+```bash
+for r in amy-edmondson christina-maslach christina-maslach-inscritos; do
+  git rm -q "public/$r/index.html"
+  git mv "pausado/$r/index.html" "public/$r/index.html"
+done
+rmdir pausado/* pausado
+```
+
+Depois é só conferir se as vagas ainda batem com o painel em `/`.
+
+> ⚠ A tela de esgotado tira o formulário **do site**, não do banco. A chave `anon`
+> continua com `INSERT` nas colunas do formulário, então um POST direto na API do
+> Supabase ainda grava uma confirmação. Enquanto os convites estiverem suspensos,
+> vale revogar o grant:
+>
+> ```sql
+> revoke insert on public.rsvps from anon;
+> ```
+>
+> e concedê-lo de volta ao reabrir:
+>
+> ```sql
+> grant insert (nome, sobrenome, empresa, cargo, email, whatsapp, cpf, convite)
+>   on public.rsvps to anon;
+> ```
 
 ## Como rodar
 
@@ -28,9 +65,11 @@ npm start            # ou: npx serve public
 | Arquivo | O que é |
 |---|---|
 | `public/index.html` + `assets/css/painel.css` | Página interna (convites + confirmações) |
-| `public/amy-edmondson/index.html` | Convite da Amy |
-| `public/christina-maslach/index.html` + `assets/css/maslach.css` | Convite da Christina |
-| `public/christina-maslach-inscritos/index.html` | Variante para quem já é inscrito (reusa o `maslach.css`) |
+| `public/amy-edmondson/index.html` | Tela de "Convite esgotado" (ver *Convites suspensos*) |
+| `public/christina-maslach/index.html` | Tela de "Convite esgotado" |
+| `public/christina-maslach-inscritos/index.html` | Tela de "Convite esgotado" |
+| `public/assets/css/esgotado.css` | Estilo da tela de esgotado |
+| `pausado/*/index.html` | Os três convites, guardados fora do deploy enquanto as vagas estão encerradas (usam o `maslach.css` e o `styles.css` quando voltam) |
 | `public/styles.css` | Design system (tokens) + canvas do pôster + modal e formulário, compartilhados |
 | `public/script.js` | Modal, máscaras, validação e envio do RSVP — compartilhado pelas duas páginas |
 | `public/assets/` | Imagens |

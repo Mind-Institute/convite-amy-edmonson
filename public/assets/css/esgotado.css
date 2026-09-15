@@ -1,0 +1,86 @@
+/* ============================================================
+   Convite esgotado — tela servida nas três rotas de convite
+   enquanto as vagas estiverem encerradas.
+
+   Os convites de verdade estão em /pausado, fora de public/, e
+   portanto fora do deploy. Para reabrir, ver o README.
+
+   Sem canvas escalado aqui: esta tela é texto curto e centralizado,
+   então clamp() responde melhor que o --u de 1080 × 1920 — não há
+   layout de design system para casar pixel a pixel.
+   ============================================================ */
+
+.pagina-esgotado {
+  min-height: 100vh;
+  display: flex;
+  background: var(--ink);
+}
+
+@supports (height: 100svh) {
+  .pagina-esgotado { min-height: 100svh; }
+}
+
+.esgotado {
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(40px, 7vh, 72px);
+  padding: clamp(32px, 6vw, 64px);
+  text-align: center;
+}
+
+/* Mesmo halo dos convites, para a página não parecer um erro do
+   servidor: é uma tela da peça, só que sem a peça. */
+.esgotado__glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.esgotado__glow--green {
+  top: clamp(-320px, -22vh, -140px);
+  right: clamp(-320px, -18vw, -120px);
+  width: clamp(420px, 62vw, 820px);
+  height: clamp(420px, 62vw, 820px);
+  background: radial-gradient(circle, rgba(104, 238, 149, 0.1) 0%, rgba(11, 11, 15, 0) 70%);
+}
+
+.esgotado__glow--purple {
+  bottom: clamp(-300px, -16vh, -120px);
+  left: clamp(-300px, -18vw, -120px);
+  width: clamp(380px, 56vw, 720px);
+  height: clamp(380px, 56vw, 720px);
+  background: radial-gradient(circle, rgba(152, 67, 255, 0.12) 0%, rgba(11, 11, 15, 0) 70%);
+}
+
+.esgotado__lockup {
+  position: relative;
+  width: auto;
+  height: clamp(38px, 6vw, 56px);
+}
+
+.esgotado__titulo {
+  position: relative;
+  margin: 0;
+  max-width: 14ch;
+  color: var(--white);
+  font-size: clamp(44px, 11vw, 96px);
+  font-weight: 900;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+/* Régua curta em Focus: fecha a composição sem acrescentar texto. */
+.esgotado__regua {
+  position: relative;
+  width: clamp(48px, 9vw, 76px);
+  height: 3px;
+  border-radius: 3px;
+  background: var(--green);
+}

@@ -27,6 +27,7 @@ Os convites de verdade **não foram apagados**: estão em `pausado/`, que fica f
 ```bash
 for r in amy-edmondson christina-maslach christina-maslach-inscritos; do
   git rm -q "public/$r/index.html"
+  mkdir -p "public/$r"          # o git rm leva o diretório junto quando ele fica vazio
   git mv "pausado/$r/index.html" "public/$r/index.html"
 done
 rmdir pausado/* pausado
